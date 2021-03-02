@@ -1,0 +1,43 @@
+$sider-width: 200px;
+
+.content {
+  padding: 1rem;
+  margin-top: 64px;
+  margin-left: $sider-width;
+  min-height: 90vh;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: $sider-width;
+  width: 100%;
+  z-index: 1;
+}
+
+.sider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-width: $sider-width !important;
+  min-width: $sider-width !important;
+  height: 100vh;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 64px;
+  font-size: 1.2rem;
+}
+
+.breadcrumb {
+  padding: 1rem 0;
+}
