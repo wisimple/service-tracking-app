@@ -1,10 +1,11 @@
 import React from "react";
 import TechnicalServiceForm from "components/TechnicalServiceForm";
+import { Card } from "antd";
 const create = () => {
   return (
-    <div>
+    <Card title="Teknik Servis İşlemi Oluştur">
       <TechnicalServiceForm />
-    </div>
+    </Card>
   );
 };
 

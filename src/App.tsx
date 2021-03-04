@@ -1,5 +1,3 @@
-import React from "react";
-import DashboardLayout from "./layouts/DashboardLayout";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Landing from "pages/Website";

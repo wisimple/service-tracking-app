@@ -12,7 +12,6 @@ import {
 import styles from "./dashboardlayout.module.scss";
 import { Link, useRouteMatch } from "react-router-dom";
 
-const { SubMenu } = Menu;
 const { Header, Footer, Sider, Content } = Layout;
 
 interface Props {
@@ -25,17 +24,17 @@ const DashboardLayout = ({ children }: Props) => {
     <Layout>
       <Sider className={styles.sider}>
         <div className={styles.logo}>Logo</div>
-        <Menu defaultSelectedKeys={["1"]} mode="inline" style={{ height: "100%" }}>
-          <Menu.Item key="1" icon={<DesktopOutlined />}>
+        <Menu defaultSelectedKeys={["/"]} mode="inline" style={{ height: "100%" }}>
+          <Menu.Item key="/" icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<ToolOutlined />}>
+          <Menu.Item key="/technical-service" icon={<ToolOutlined />}>
             <Link to={`${url}/technical-service`}>Teknik Servis</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<TeamOutlined />}>
+          <Menu.Item key="/customers" icon={<TeamOutlined />}>
             <Link to={`${url}/customers`}>Müşterilerim</Link>
           </Menu.Item>
-          <Menu.Item key="4" icon={<SettingOutlined />}>
+          <Menu.Item key="/settings" icon={<SettingOutlined />}>
             <Link to={`${url}/settings`}>Ayarlar</Link>
           </Menu.Item>
         </Menu>
@@ -56,7 +55,7 @@ const DashboardLayout = ({ children }: Props) => {
         </Content>
         <Footer className={styles.footer}>
           Teknik Servis Yazilimi 2021{" "}
-          <a href="https://arifsamisahin.github.io/" target="_blank" rel="noopener noreferer">
+          <a href="https://arifsamisahin.github.io/" target="_blank" rel="noopener noreferrer">
             Arif Sami
           </a>
         </Footer>
