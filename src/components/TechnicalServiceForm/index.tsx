@@ -13,6 +13,8 @@ import { fetchProductCategories } from "store/productCategory/actions";
 import { fetchProductsByBrand } from "store/product/actions";
 import { Product } from "store/product/types";
 import { fetchCustomers } from "store/customer/actions";
+import Modal from "antd/lib/modal/Modal";
+import CustomerForm from "components/CustomerForm";
 
 const { TextArea } = Input;
 
@@ -26,6 +28,7 @@ const ServiceForm = () => {
 
   const [form] = Form.useForm();
   const [selectedProduct, setselectedProduct] = useState<Product | null>();
+  const [isCustomerModalOpen, setisCustomerModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProductCategories());
@@ -34,212 +37,230 @@ const ServiceForm = () => {
     }
   }, []);
   return (
-    <Form
-      form={form}
-      size="large"
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      onFinish={(values) => console.log(values)}
-    >
-      <Form.Item
-        label="Müşteri"
-        name={["customer", "_id"]}
-        required
-        rules={[{ required: true, message: "Lütfen müşteri seçiniz" }]}
+    <>
+      <Modal
+        visible={isCustomerModalOpen}
+        onCancel={() => setisCustomerModalOpen(false)}
+        title="Yeni Müşteri Ekle"
+        footer={null}
       >
-        <Select
-          showSearch
-          loading={customersLoading}
-          dropdownRender={(menu) => (
-            <div>
-              {menu}
-              <Divider style={{ margin: "4px 0" }} />
-              <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-                <Button type="link" size="middle">
-                  <PlusOutlined /> Yeni Müşteri Ekle
-                </Button>
-              </div>
-            </div>
-          )}
-        >
-          {customers.map((item) => (
-            <Select.Option key={item._id} value={item._id}>
-              {item.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item label="Talep" name={["customer", "demand"]}>
-        <TextArea />
-      </Form.Item>
-
-      <Divider plain orientation="left">
-        Cihaz Bilgileri
-      </Divider>
-
-      {selectedProduct?.imgFile && (
-        <Row justify="center" style={{ marginBottom: "1.5rem" }}>
-          <Col>
-            <img
-              src={`https://fdn2.gsmarena.com/vv/bigpic/${selectedProduct.imgFile}`}
-              height={150}
-              width="auto"
-            />
-          </Col>
-        </Row>
-      )}
-
-      <Form.Item label="Cihaz Seçiniz">
-        <Input.Group compact>
-          <Form.Item name={["device", "categoryId"]} noStyle>
-            <Select
-              style={{ width: "40%" }}
-              placeholder="Cihaz Tipi"
-              allowClear
-              onSelect={(value: string) => {
-                setselectedProduct(undefined);
-                form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
-                dispatch(fetchBrandsByCategory(value));
-              }}
-              onClear={() => {
-                setselectedProduct(undefined);
-                form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
-              }}
-              loading={loading}
-            >
-              {categories.map((item) => (
-                <Select.Option key={item._id} value={item._id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={["device", "brandId"]} noStyle>
-            <Select
-              showSearch
-              style={{ width: "30%" }}
-              placeholder="Marka"
-              loading={brandLoading}
-              allowClear
-              onSelect={(value: string) => {
-                form.setFieldsValue({ device: { productId: undefined } });
-                setselectedProduct(undefined);
-                dispatch(fetchProductsByBrand(value));
-              }}
-              onClear={() => {
-                setselectedProduct(undefined);
-                form.setFieldsValue({ device: { productId: undefined } });
-              }}
-              filterOption={(input, option: any) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {brands.map((item) => (
-                <Select.Option key={item._id} value={item._id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={["device", "productId"]} noStyle>
-            <Select
-              showSearch
-              allowClear
-              style={{ width: "30%" }}
-              placeholder="Model"
-              loading={productLoading}
-              filterOption={(input, option: any) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              onChange={(value: string) => setselectedProduct(products.find((p) => p._id === value))}
-            >
-              {products.map((item) => (
-                <Select.Option key={item._id} value={item._id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Input.Group>
-      </Form.Item>
-
-      <Form.Item label="Imei/Seri Numarası" name={["device", "serialNumber"]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Cihaz Resimleri" name="images">
-        <Upload name="images[]" listType="picture" fileList={[]} multiple>
-          <Button icon={<UploadOutlined />} size="middle">
-            Resimleri Seç
-          </Button>
-        </Upload>
-      </Form.Item>
-
-      <Divider plain orientation="left">
-        Servis Bilgileri
-      </Divider>
-
-      <Form.Item label="Durum" name="staus" initialValue={3}>
-        <Radio.Group buttonStyle="solid" size="middle">
-          {technicServiceStatusTypes.map((item) => (
-            <Radio.Button key={item.value} value={item.value} style={{ marginBottom: "6px" }}>
-              {item.text}
-            </Radio.Button>
-          ))}
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item label="Arıza Tipi" name="faultTypeId">
-        <Select showSearch placeholder="Arızayı Seçiniz">
-          {faultTypes.map((item) => (
-            <Select.Option key={item._id} value={item._id}>
-              {item.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item label="Yapılan İşlemler / Açıklama" name="description">
-        <TextArea rows={3} />
-      </Form.Item>
-
-      <Form.Item label="Verilen Garanti Süresi" name="warrantyDuration" initialValue={0}>
-        <Select placeholder="Garanti Süresini Seçiniz">
-          {warrantyDurations.map((item) => (
-            <Select.Option key={item.value} value={item.value}>
-              {item.text}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Divider plain orientation="left">
-        Ücret Bilgileri
-      </Divider>
-
-      <Form.Item wrapperCol={{ offset: 4 }} style={{ marginBottom: 0 }}>
-        <Form.Item label="Toplam Ücret" name="totalCost" style={{ display: "inline-block", width: "120px" }}>
-          <Input type="number" addonAfter="₺" />
-        </Form.Item>
-
+        <CustomerForm onSubmit={() => setisCustomerModalOpen(false)} />
+      </Modal>
+      <Form
+        form={form}
+        scrollToFirstError
+        size="large"
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 14 }}
+        onFinish={(values) => console.log(values)}
+      >
         <Form.Item
-          label="Ödenen Ücret"
-          name="paidAmount"
-          style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}
+          label="Müşteri"
+          name={["customer", "_id"]}
+          required
+          rules={[{ required: true, message: "Lütfen müşteri seçiniz" }]}
         >
-          <Input type="number" addonAfter="₺" />
+          <Select
+            showSearch
+            loading={customersLoading}
+            filterOption={(input, option: any) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            dropdownRender={(menu) => (
+              <div>
+                {menu}
+                <Divider style={{ margin: "4px 0" }} />
+                <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
+                  <Button type="link" size="middle" onClick={() => setisCustomerModalOpen(true)}>
+                    <PlusOutlined /> Yeni Müşteri Ekle
+                  </Button>
+                </div>
+              </div>
+            )}
+          >
+            {customers.map((item) => (
+              <Select.Option key={item._id} value={item._id}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
-        {/* <Form.Item label="Kalan" style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}>
+        <Form.Item label="Talep" name={["customer", "demand"]}>
+          <TextArea />
+        </Form.Item>
+
+        <Divider plain orientation="left">
+          Cihaz Bilgileri
+        </Divider>
+
+        {selectedProduct?.imgFile && (
+          <Row justify="center" style={{ marginBottom: "1.5rem" }}>
+            <Col>
+              <img
+                src={`https://fdn2.gsmarena.com/vv/bigpic/${selectedProduct.imgFile}`}
+                height={150}
+                width="auto"
+              />
+            </Col>
+          </Row>
+        )}
+
+        <Form.Item label="Cihaz Seçiniz">
+          <Input.Group compact>
+            <Form.Item name={["device", "categoryId"]} noStyle>
+              <Select
+                style={{ width: "40%" }}
+                placeholder="Cihaz Tipi"
+                allowClear
+                onSelect={(value: string) => {
+                  setselectedProduct(undefined);
+                  form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
+                  dispatch(fetchBrandsByCategory(value));
+                }}
+                onClear={() => {
+                  setselectedProduct(undefined);
+                  form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
+                }}
+                loading={loading}
+              >
+                {categories.map((item) => (
+                  <Select.Option key={item._id} value={item._id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name={["device", "brandId"]} noStyle>
+              <Select
+                showSearch
+                style={{ width: "30%" }}
+                placeholder="Marka"
+                loading={brandLoading}
+                allowClear
+                onSelect={(value: string) => {
+                  form.setFieldsValue({ device: { productId: undefined } });
+                  setselectedProduct(undefined);
+                  dispatch(fetchProductsByBrand(value));
+                }}
+                onClear={() => {
+                  setselectedProduct(undefined);
+                  form.setFieldsValue({ device: { productId: undefined } });
+                }}
+                filterOption={(input, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {brands.map((item) => (
+                  <Select.Option key={item._id} value={item._id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name={["device", "productId"]} noStyle>
+              <Select
+                showSearch
+                allowClear
+                style={{ width: "30%" }}
+                placeholder="Model"
+                loading={productLoading}
+                filterOption={(input, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                onChange={(value: string) => setselectedProduct(products.find((p) => p._id === value))}
+              >
+                {products.map((item) => (
+                  <Select.Option key={item._id} value={item._id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
+
+        <Form.Item label="Imei/Seri Numarası" name={["device", "serialNumber"]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Cihaz Resimleri" name="images">
+          <Upload name="images[]" listType="picture" fileList={[]} multiple>
+            <Button icon={<UploadOutlined />} size="middle">
+              Resimleri Seç
+            </Button>
+          </Upload>
+        </Form.Item>
+
+        <Divider plain orientation="left">
+          Servis Bilgileri
+        </Divider>
+
+        <Form.Item label="Durum" name="staus" initialValue={3}>
+          <Radio.Group buttonStyle="solid" size="middle">
+            {technicServiceStatusTypes.map((item) => (
+              <Radio.Button key={item.value} value={item.value} style={{ marginBottom: "6px" }}>
+                {item.text}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item label="Arıza Tipi" name="faultTypeId">
+          <Select showSearch placeholder="Arızayı Seçiniz">
+            {faultTypes.map((item) => (
+              <Select.Option key={item._id} value={item._id}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="Yapılan İşlemler / Açıklama" name="description">
+          <TextArea rows={3} />
+        </Form.Item>
+
+        <Form.Item label="Verilen Garanti Süresi" name="warrantyDuration" initialValue={0}>
+          <Select placeholder="Garanti Süresini Seçiniz">
+            {warrantyDurations.map((item) => (
+              <Select.Option key={item.value} value={item.value}>
+                {item.text}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Divider plain orientation="left">
+          Ücret Bilgileri
+        </Divider>
+
+        <Form.Item wrapperCol={{ offset: 4 }} style={{ marginBottom: 0 }}>
+          <Form.Item
+            label="Toplam Ücret"
+            name="totalCost"
+            style={{ display: "inline-block", width: "120px" }}
+          >
+            <Input type="number" addonAfter="₺" />
+          </Form.Item>
+
+          <Form.Item
+            label="Ödenen Ücret"
+            name="paidAmount"
+            style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}
+          >
+            <Input type="number" addonAfter="₺" />
+          </Form.Item>
+          {/* <Form.Item label="Kalan" style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}>
             <Input disabled />
           </Form.Item> */}
-      </Form.Item>
+        </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-          KAYDET
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item wrapperCol={{ offset: 4 }}>
+          <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+            KAYDET
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 

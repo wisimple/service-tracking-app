@@ -11,6 +11,7 @@ export interface Customer extends CustomerDto {
 
 export interface CustomerState {
   customers: Customer[];
+  customer?: Customer;
   loading: boolean;
   cLoading: boolean;
   dLoading: boolean;
@@ -19,6 +20,9 @@ export interface CustomerState {
 export const FETCH_CUSTOMERS = "FETCH_CUSTOMERS";
 export const SET_CUSTOMERS_LOADING = "SET_CUSTOMERS_LOADING";
 export const CREATE_CUSTOMER = "CREATE_CUSTOMER";
+export const GET_CUSTOMER = "GET_CUSTOMER";
+export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
+export const DELETE_CUSTOMER = "DELETE_CUSTOMER";
 
 interface FetchCustomersAction {
   type: typeof FETCH_CUSTOMERS;
@@ -34,6 +38,27 @@ interface CreateCustomerAction {
   };
 }
 
+interface GetCustomerAction {
+  type: typeof GET_CUSTOMER;
+  payload: {
+    customer: Customer;
+  };
+}
+
+interface UpdateCustomerAction {
+  type: typeof UPDATE_CUSTOMER;
+  payload: {
+    customer: Customer;
+  };
+}
+
+interface DeleteCustomerAction {
+  type: typeof DELETE_CUSTOMER;
+  payload: {
+    customer: Customer;
+  };
+}
+
 interface SetLoading {
   type: typeof SET_CUSTOMERS_LOADING;
   payload: {
@@ -43,6 +68,12 @@ interface SetLoading {
   };
 }
 
-export type CustomerActionTypes = FetchCustomersAction | SetLoading | CreateCustomerAction;
+export type CustomerActionTypes =
+  | FetchCustomersAction
+  | SetLoading
+  | CreateCustomerAction
+  | GetCustomerAction
+  | UpdateCustomerAction
+  | DeleteCustomerAction;
 
 export type CustomerThunkActionTypes = ThunkAction<void, RootState, unknown, CustomerActionTypes>;

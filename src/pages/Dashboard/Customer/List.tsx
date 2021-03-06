@@ -1,13 +1,17 @@
+import { useEffect } from "react";
+import { Avatar, Button, Col, Row, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Row, Table } from "antd";
 
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import { RootState } from "store";
 import { fetchCustomers } from "store/customer/actions";
+import { Customer } from "store/customer/types";
+
+import { getCustomerAvatarSrc } from "helpers";
 
 const { Column } = Table;
+const { Title } = Typography;
 
 const CustomerIndex = () => {
   const { customers, loading } = useSelector((state: RootState) => state.customerState);
@@ -24,7 +28,7 @@ const CustomerIndex = () => {
     <>
       <Row justify="space-between" style={{ padding: "0.5rem 0" }}>
         <Col>
-          <h1>Müşterilerim</h1>
+          <Title level={2}>Müşterilerim</Title>
         </Col>
         <Col>
           <Link to={`${url}/create`}>
@@ -34,15 +38,38 @@ const CustomerIndex = () => {
           </Link>
         </Col>
       </Row>
-      <Table dataSource={customers}>
-        <Column title="Müşteri" key="name" dataIndex="name" />
-        {/* <Column
-          title="İletişim"
-          key="phone"
+      <Table
+        dataSource={customers}
+        rowKey="_id"
+        pagination={{ pageSize: 20, position: ["bottomCenter"] }}
+        loading={loading}
+      >
+        <Column
+          title="Müşteri"
+          dataIndex="name"
+          render={(a, customer: Customer) => (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Avatar src={getCustomerAvatarSrc(customer)} style={{ marginRight: 8 }} />
+              {customer.name}
+            </div>
+          )}
+        />
+        <Column
+          title="Telefon Numarası"
           dataIndex="contact"
           render={(contact) => (contact?.phone ? <a href={`tel:${contact.phone}`}>{contact.phone}</a> : "")}
         />
-        <Column title="İşlem" dataIndex="action" key="action" render={() => <Button>Detaylar</Button>} /> */}
+        <Column title="Açıklama / Notlar" dataIndex="desc" />
+
+        <Column
+          title="İşlem"
+          dataIndex="action"
+          render={(a, customer: Customer) => (
+            <Link to={`${url}/${customer._id}`}>
+              <Button>Detaylar</Button>
+            </Link>
+          )}
+        />
       </Table>
     </>
   );

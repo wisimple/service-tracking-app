@@ -301,34 +301,30 @@ export default function TechnicalService() {
           </Link>
         </Col>
       </Row>
-      <Table dataSource={data}>
+      <Table dataSource={data} rowKey="_id" pagination={{ pageSize: 20 }}>
         <Column
           title="Müşteri"
           dataIndex="customerId"
-          key="customerId"
           render={(c: { _id: string; name: string }) => <Link to="/dashboard/customer/id">{c.name}</Link>}
         />
         <Column
           title="Arıza Tipi"
           dataIndex="faultType"
-          key="faultType"
           render={(type: { _id: string; name: string }) => {
             return type.name;
           }}
         />
-        <Column title="Durum" dataIndex="status" key="status" />
-        <Column title="Ücret" dataIndex="cost" key="cost" />
+        <Column title="Durum" dataIndex="status" />
+        <Column title="Ücret" dataIndex="cost" />
         <Column
           title="Tarih"
           dataIndex="cAt"
-          key="cAt"
           render={(date: string) => {
             return new Date(date).toLocaleDateString();
           }}
         />
         <Column
           title="İşlem"
-          key="action"
           render={() => {
             return (
               <Button type="dashed">

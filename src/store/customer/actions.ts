@@ -4,8 +4,11 @@ import {
   CREATE_CUSTOMER,
   CustomerActionTypes,
   CustomerThunkActionTypes,
+  DELETE_CUSTOMER,
   FETCH_CUSTOMERS,
+  GET_CUSTOMER,
   SET_CUSTOMERS_LOADING,
+  UPDATE_CUSTOMER,
 } from "./types";
 
 export const fetchCustomers = (): CustomerThunkActionTypes => async (dispatch) => {
@@ -28,6 +31,45 @@ export const createCustomer = (customerDto: CustomerDto): CustomerThunkActionTyp
     });
 
     dispatch(setLoading({ cLoading: false }));
+  } catch (error) {}
+};
+
+export const getCustomer = (id: string): CustomerThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ loading: true }));
+    const { data } = await api.get(`customers/${id}`);
+
+    dispatch({
+      type: GET_CUSTOMER,
+      payload: { customer: data },
+    });
+    dispatch(setLoading({ loading: false }));
+  } catch (error) {}
+};
+
+export const updateCustomer = (id: string, customerDto: CustomerDto): CustomerThunkActionTypes => async (
+  dispatch
+) => {
+  try {
+    dispatch(setLoading({ cLoading: true }));
+    const { data } = await api.put(`customers/${id}`, customerDto);
+    dispatch({
+      type: UPDATE_CUSTOMER,
+      payload: { customer: data },
+    });
+    dispatch(setLoading({ cLoading: false }));
+  } catch (error) {}
+};
+
+export const deleteCustomer = (id: string): CustomerThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ dLoading: true }));
+    const { data } = await api.delete(`customers/${id}`);
+    dispatch({
+      type: DELETE_CUSTOMER,
+      payload: { customer: data },
+    });
+    dispatch(setLoading({ dLoading: false }));
   } catch (error) {}
 };
 
