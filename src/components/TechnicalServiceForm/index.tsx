@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { technicServiceStatusTypes, warrantyDurations } from "constants/index";
 
-import { faultTypes, customers } from "mockData";
+import { faultTypes } from "mockData";
 import { RootState } from "store";
 import { fetchBrandsByCategory } from "store/brand/actions";
 import { fetchProductCategories } from "store/productCategory/actions";
 import { fetchProductsByBrand } from "store/product/actions";
 import { Product } from "store/product/types";
+import { fetchCustomers } from "store/customer/actions";
 
 const { TextArea } = Input;
 
@@ -19,6 +20,8 @@ const ServiceForm = () => {
   const { categories, loading } = useSelector((state: RootState) => state.productCategoryState);
   const { brands, loading: brandLoading } = useSelector((state: RootState) => state.brandState);
   const { products, loading: productLoading } = useSelector((state: RootState) => state.productState);
+  const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
+
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -26,6 +29,9 @@ const ServiceForm = () => {
 
   useEffect(() => {
     dispatch(fetchProductCategories());
+    if (customers.length === 0) {
+      dispatch(fetchCustomers());
+    }
   }, []);
   return (
     <Form
@@ -43,6 +49,7 @@ const ServiceForm = () => {
       >
         <Select
           showSearch
+          loading={customersLoading}
           dropdownRender={(menu) => (
             <div>
               {menu}
@@ -224,7 +231,7 @@ const ServiceForm = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
           KAYDET
         </Button>
       </Form.Item>

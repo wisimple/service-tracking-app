@@ -296,7 +296,7 @@ export default function TechnicalService() {
         <Col>
           <Link to={`${url}/create`}>
             <Button type="primary" icon={<PlusOutlined />}>
-              Yeni İşlem Ekle
+              Yeni İşlem Ekle {url}
             </Button>
           </Link>
         </Col>
@@ -328,6 +328,7 @@ export default function TechnicalService() {
         />
         <Column
           title="İşlem"
+          key="action"
           render={() => {
             return (
               <Button type="dashed">
