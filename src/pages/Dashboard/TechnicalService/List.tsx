@@ -296,7 +296,7 @@ export default function TechnicalService() {
         <Col>
           <Link to={`${url}/create`}>
             <Button type="primary" icon={<PlusOutlined />}>
-              Yeni İşlem Ekle {url}
+              Yeni İşlem Ekle
             </Button>
           </Link>
         </Col>

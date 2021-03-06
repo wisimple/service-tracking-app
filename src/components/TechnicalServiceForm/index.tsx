@@ -80,7 +80,11 @@ const ServiceForm = () => {
       {selectedProduct?.imgFile && (
         <Row justify="center" style={{ marginBottom: "1.5rem" }}>
           <Col>
-            <img src={`/images/phones/${selectedProduct.imgFile}`} height={150} width="auto" />
+            <img
+              src={`https://fdn2.gsmarena.com/vv/bigpic/${selectedProduct.imgFile}`}
+              height={150}
+              width="auto"
+            />
           </Col>
         </Row>
       )}
