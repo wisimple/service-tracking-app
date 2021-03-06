@@ -13,6 +13,7 @@ export interface BrandState {
 
 export const FETCH_BRANDS_BY_CATEGORY = "FETCH_BRANDS_BY_CATEGORY";
 export const SET_BRANDS_LOADING = "SET_BRANDS_LOADING";
+export const RESET_BRANDS = "RESET_BRANDS";
 
 interface FetchBrandsByCategoryAction {
   type: typeof FETCH_BRANDS_BY_CATEGORY;
@@ -28,6 +29,10 @@ interface SetLoadingAction {
   };
 }
 
-export type BrandActionTypes = FetchBrandsByCategoryAction | SetLoadingAction;
+interface ResetAction {
+  type: typeof RESET_BRANDS;
+}
+
+export type BrandActionTypes = FetchBrandsByCategoryAction | SetLoadingAction | ResetAction;
 
 export type BrandThunkActionTypes = ThunkAction<void, RootState, unknown, BrandActionTypes>;

@@ -15,6 +15,7 @@ export interface ProductdState {
 
 export const FETCH_PRODUCTS_BY_BRAND = "FETCH_PRODUCTS_BY_BRAND";
 export const SET_PRODUCTS_LOADING = "SET_PRODUCTS_LOADING";
+export const RESET_PRODUCTS = "RESET_PRODUCTS";
 
 interface FetchProductsByCategoryAction {
   type: typeof FETCH_PRODUCTS_BY_BRAND;
@@ -30,6 +31,9 @@ interface SetLoadingAction {
   };
 }
 
-export type ProductActionTypes = FetchProductsByCategoryAction | SetLoadingAction;
+interface ResetAction {
+  type: typeof RESET_PRODUCTS;
+}
+export type ProductActionTypes = FetchProductsByCategoryAction | SetLoadingAction | ResetAction;
 
 export type ProductThunkActionTypes = ThunkAction<void, RootState, unknown, ProductActionTypes>;

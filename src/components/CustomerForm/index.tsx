@@ -57,7 +57,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
         </Radio.Group>
       </Form.Item>
       {showGender && (
-        <Form.Item name="gender" initialValue={true}>
+        <Form.Item name="gender" initialValue={data?.gender || true}>
           <Radio.Group>
             <Radio value={true}>Bay</Radio>
             <Radio value={false}>Bayan</Radio>

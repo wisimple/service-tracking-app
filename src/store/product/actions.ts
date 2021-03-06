@@ -3,6 +3,7 @@ import {
   ProductThunkActionTypes,
   SET_PRODUCTS_LOADING,
   FETCH_PRODUCTS_BY_BRAND,
+  RESET_PRODUCTS,
 } from "./types";
 import api from "utils/api";
 
@@ -15,6 +16,8 @@ export const fetchProductsByBrand = (brandId: string): ProductThunkActionTypes =
     dispatch(setLoading(false));
   } catch (error) {}
 };
+
+export const resetProducts = (): ProductActionTypes => ({ type: RESET_PRODUCTS });
 
 const setLoading = (loading: boolean): ProductActionTypes => {
   return { type: SET_PRODUCTS_LOADING, payload: { loading } };

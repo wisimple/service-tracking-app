@@ -8,13 +8,16 @@ import { technicServiceStatusTypes, warrantyDurations } from "constants/index";
 
 import { faultTypes } from "mockData";
 import { RootState } from "store";
-import { fetchBrandsByCategory } from "store/brand/actions";
+import { fetchBrandsByCategory, resetBrands } from "store/brand/actions";
 import { fetchProductCategories } from "store/productCategory/actions";
-import { fetchProductsByBrand } from "store/product/actions";
+import { fetchProductsByBrand, resetProducts } from "store/product/actions";
 import { Product } from "store/product/types";
 import { fetchCustomers } from "store/customer/actions";
 import Modal from "antd/lib/modal/Modal";
 import CustomerForm from "components/CustomerForm";
+import Avatar from "antd/lib/avatar/avatar";
+import { getCustomerAvatarSrc } from "helpers";
+import FaultTypeCrud from "components/FaultTypeCrud";
 
 const { TextArea } = Input;
 
@@ -29,6 +32,7 @@ const ServiceForm = () => {
   const [form] = Form.useForm();
   const [selectedProduct, setselectedProduct] = useState<Product | null>();
   const [isCustomerModalOpen, setisCustomerModalOpen] = useState(false);
+  const [isFaultTypeModalOpen, setisFaultTypeModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProductCategories());
@@ -45,6 +49,14 @@ const ServiceForm = () => {
         footer={null}
       >
         <CustomerForm onSubmit={() => setisCustomerModalOpen(false)} />
+      </Modal>
+      <Modal
+        visible={isFaultTypeModalOpen}
+        onCancel={() => setisFaultTypeModalOpen(false)}
+        title="Yeni Arıza Tipi Ekle"
+        footer={null}
+      >
+        <FaultTypeCrud />
       </Modal>
       <Form
         form={form}
@@ -63,9 +75,9 @@ const ServiceForm = () => {
           <Select
             showSearch
             loading={customersLoading}
-            filterOption={(input, option: any) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
+            filterOption={(input, option: any) => {
+              return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+            }}
             dropdownRender={(menu) => (
               <div>
                 {menu}
@@ -79,8 +91,11 @@ const ServiceForm = () => {
             )}
           >
             {customers.map((item) => (
-              <Select.Option key={item._id} value={item._id}>
-                {item.name}
+              <Select.Option key={item._id} value={item._id} name={item.name}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar size="small" src={getCustomerAvatarSrc(item)} style={{ marginRight: 8 }} />
+                  {item.name}
+                </div>
               </Select.Option>
             ))}
           </Select>
@@ -120,6 +135,8 @@ const ServiceForm = () => {
                 onClear={() => {
                   setselectedProduct(undefined);
                   form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
+                  dispatch(resetBrands());
+                  dispatch(resetProducts());
                 }}
                 loading={loading}
               >
@@ -145,6 +162,7 @@ const ServiceForm = () => {
                 onClear={() => {
                   setselectedProduct(undefined);
                   form.setFieldsValue({ device: { productId: undefined } });
+                  dispatch(resetProducts());
                 }}
                 filterOption={(input, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -206,7 +224,21 @@ const ServiceForm = () => {
         </Form.Item>
 
         <Form.Item label="Arıza Tipi" name="faultTypeId">
-          <Select showSearch placeholder="Arızayı Seçiniz">
+          <Select
+            showSearch
+            placeholder="Arızayı Seçiniz"
+            dropdownRender={(menu) => (
+              <div>
+                {menu}
+                <Divider style={{ margin: "4px 0" }} />
+                <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
+                  <Button type="link" size="middle" onClick={() => setisFaultTypeModalOpen(true)}>
+                    <PlusOutlined /> Yeni Arıza Tipi Ekle
+                  </Button>
+                </div>
+              </div>
+            )}
+          >
             {faultTypes.map((item) => (
               <Select.Option key={item._id} value={item._id}>
                 {item.name}
