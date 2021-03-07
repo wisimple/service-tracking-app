@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { technicServiceStatusTypes, warrantyDurations } from "constants/index";
 
-import { faultTypes } from "mockData";
 import { RootState } from "store";
 import { fetchBrandsByCategory, resetBrands } from "store/brand/actions";
 import { fetchProductCategories } from "store/productCategory/actions";
@@ -18,6 +17,7 @@ import CustomerForm from "components/CustomerForm";
 import Avatar from "antd/lib/avatar/avatar";
 import { getCustomerAvatarSrc } from "helpers";
 import FaultTypeCrud from "components/FaultTypeCrud";
+import { fetchFaultTypes } from "store/faultType/actions";
 
 const { TextArea } = Input;
 
@@ -26,6 +26,7 @@ const ServiceForm = () => {
   const { brands, loading: brandLoading } = useSelector((state: RootState) => state.brandState);
   const { products, loading: productLoading } = useSelector((state: RootState) => state.productState);
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
+  const { faultTypes, loading: faultLoading } = useSelector((state: RootState) => state.faultTypeState);
 
   const dispatch = useDispatch();
 
@@ -36,6 +37,7 @@ const ServiceForm = () => {
 
   useEffect(() => {
     dispatch(fetchProductCategories());
+    dispatch(fetchFaultTypes());
     if (customers.length === 0) {
       dispatch(fetchCustomers());
     }
@@ -226,7 +228,12 @@ const ServiceForm = () => {
         <Form.Item label="Arıza Tipi" name="faultTypeId">
           <Select
             showSearch
+            allowClear
             placeholder="Arızayı Seçiniz"
+            loading={faultLoading}
+            filterOption={(input, option: any) => {
+              return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+            }}
             dropdownRender={(menu) => (
               <div>
                 {menu}

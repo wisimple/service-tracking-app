@@ -9,3 +9,7 @@ export interface CustomerDto {
   };
   desc?: string;
 }
+
+export interface FaultTypeDto {
+  name: string;
+}
