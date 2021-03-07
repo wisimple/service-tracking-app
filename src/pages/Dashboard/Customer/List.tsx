@@ -26,9 +26,11 @@ const CustomerIndex = () => {
 
   return (
     <>
-      <Row justify="space-between" style={{ padding: "0.5rem 0" }}>
+      <Row justify="space-between" align="middle" style={{ paddingBottom: 16 }}>
         <Col>
-          <Title level={2}>Müşterilerim</Title>
+          <Title level={3} style={{ margin: 0 }}>
+            Müşterilerim
+          </Title>
         </Col>
         <Col>
           <Link to={`${url}/create`}>

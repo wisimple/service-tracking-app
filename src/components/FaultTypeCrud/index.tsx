@@ -1,57 +1,114 @@
-import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Table } from "antd";
+import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
+import { Button, Form, Input, List, Table, Popconfirm } from "antd";
 import { FaultTypeDto } from "dto";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 
-import { createFaultType, deleteFaultType } from "store/faultType/actions";
+import { createFaultType, deleteFaultType, selectFaultType, updateFaultType } from "store/faultType/actions";
 
-const { Column } = Table;
+const { Search } = Input;
 
 const FaultTypeCrud = () => {
-  const { faultTypes, loading, cLoading, dLoading } = useSelector((state: RootState) => state.faultTypeState);
+  const { faultTypes, loading, cLoading, dLoading, uLoading, selectedItem } = useSelector(
+    (state: RootState) => state.faultTypeState
+  );
   const dispatch = useDispatch();
+  const [name, setname] = useState("");
+  const [updatedName, setupdatedName] = useState("");
 
-  const [form] = Form.useForm();
-
-  const handleSubmit = async (values: FaultTypeDto) => {
-    await dispatch(createFaultType(values));
-    form.resetFields();
+  const handleCreateSubmit = async (name: string) => {
+    await dispatch(createFaultType({ name }));
+    setname("");
   };
+
+  const handleUpdateSubmit = async () => {
+    if (selectedItem) {
+      await dispatch(updateFaultType(selectedItem?._id, { name: updatedName }));
+    }
+  };
+
+  useEffect(() => {
+    setupdatedName(selectedItem?.name || "");
+  }, [selectedItem]);
 
   return (
     <>
-      <Form form={form} layout="inline" onFinish={handleSubmit}>
-        <Form.Item
-          style={{ flexGrow: 1 }}
-          name="name"
-          required
-          rules={[{ required: true, message: "Lütfen arıza tipini giriniz" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={cLoading}>
-            Ekle
-          </Button>
-        </Form.Item>
-      </Form>
-      <Table dataSource={faultTypes} loading={loading} pagination={false} rowKey="_id">
-        <Column title="Arıza Tipi" dataIndex="name" key="name" render={(a) => <Input value={a} />} />
-        <Column
-          title="İşlem"
-          render={(a) => (
-            <Button
-              size="small"
-              icon={<DeleteOutlined />}
-              danger
-              onClick={() => dispatch(deleteFaultType(a._id))}
-            >
-              Sil
-            </Button>
-          )}
-        />
-      </Table>
+      <Search
+        placeholder="input text"
+        enterButton="KAYDET"
+        loading={cLoading}
+        value={name}
+        onChange={({ target }) => setname(target.value)}
+        onSearch={handleCreateSubmit}
+      />
+      <List
+        loading={loading}
+        itemLayout="horizontal"
+        dataSource={faultTypes}
+        renderItem={(item) => (
+          <List.Item>
+            {!dLoading && selectedItem?._id === item._id ? (
+              <Form onFinish={handleUpdateSubmit} style={{ width: "100%" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                  <Input
+                    value={updatedName}
+                    onChange={({ target }) => setupdatedName(target.value)}
+                    required
+                    name="name"
+                    autoFocus
+                  />
+                  <Button htmlType="submit" loading={uLoading}>
+                    Düzenle
+                  </Button>
+                </div>
+              </Form>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>{item.name}</span>
+                <div>
+                  <Button
+                    size="small"
+                    icon={<FormOutlined />}
+                    onClick={() => {
+                      dispatch(selectFaultType(item._id));
+                    }}
+                    style={{ marginRight: 8 }}
+                    loading={selectedItem?._id === item._id && uLoading}
+                  >
+                    Düzenle
+                  </Button>
+                  <Popconfirm
+                    title="Bu işlem geri alınamaz, silmek istediğinizden emin misiniz?"
+                    onConfirm={() => {
+                      dispatch(deleteFaultType(item._id));
+                      dispatch(selectFaultType(item._id));
+                    }}
+                    okText="Sil"
+                    cancelText="Vazgeç"
+                  >
+                    <Button
+                      size="small"
+                      icon={<DeleteOutlined />}
+                      danger
+                      loading={selectedItem?._id === item._id && dLoading}
+                    >
+                      Sil
+                    </Button>
+                  </Popconfirm>
+                </div>
+              </div>
+            )}
+          </List.Item>
+        )}
+      />
     </>
   );
 };

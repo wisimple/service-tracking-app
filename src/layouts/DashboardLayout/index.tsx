@@ -1,18 +1,42 @@
 import { Breadcrumb, Layout, Menu } from "antd";
 import React from "react";
-import {
-  DesktopOutlined,
-  ToolOutlined,
-  UserOutlined,
-  SettingOutlined,
-  HomeOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { DesktopOutlined, ToolOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
 
-import styles from "./dashboardlayout.module.scss";
-import { Link, useRouteMatch } from "react-router-dom";
+import styles from "./dashLayout.module.scss";
+import { Link, useLocation, useRouteMatch } from "react-router-dom";
 
 const { Header, Footer, Sider, Content } = Layout;
+
+const getPathName = (pathName: string) => {
+  if (pathName.length === 24) {
+    return "Göster";
+  }
+  switch (pathName) {
+    case "":
+      return "Ana Ekran";
+    case "technical-service":
+      return "Teknik Servis";
+    case "customers":
+      return "Müşterilerim";
+    case "create":
+      return "Yeni";
+    default:
+      return "hello";
+  }
+};
+
+const BreadCrumbComponent = () => {
+  const { pathname } = useLocation();
+  const items = pathname.replace(/\/dashboard/g, "").split("/");
+
+  return (
+    <Breadcrumb style={{ paddingBottom: 16 }}>
+      {items.map((i) => (
+        <Breadcrumb.Item key={i}> {getPathName(i)}</Breadcrumb.Item>
+      ))}
+    </Breadcrumb>
+  );
+};
 
 interface Props {
   children: React.ReactNode;
@@ -20,9 +44,10 @@ interface Props {
 
 const DashboardLayout = ({ children }: Props) => {
   const { url } = useRouteMatch();
+
   return (
     <Layout>
-      <Sider className={styles.sider}>
+      <Sider breakpoint="lg" collapsedWidth="0">
         <div className={styles.logo}>Logo</div>
         <Menu defaultSelectedKeys={["/"]} mode="inline" style={{ height: "100%" }}>
           <Menu.Item key="/" icon={<DesktopOutlined />}>
@@ -39,21 +64,13 @@ const DashboardLayout = ({ children }: Props) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout className={styles.content}>
-        <Header className={styles.header}></Header>
-        <Content>
-          <Breadcrumb className={styles.breadcrumb}>
-            <Breadcrumb.Item>
-              <HomeOutlined />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <UserOutlined />
-              <span>Teknik Servis</span>
-            </Breadcrumb.Item>
-          </Breadcrumb>
+      <Layout>
+        <Header></Header>
+        <Content style={{ marginTop: 24, padding: 16 }}>
+          <BreadCrumbComponent />
           {children}
         </Content>
-        <Footer className={styles.footer}>
+        <Footer>
           Teknik Servis Yazilimi 2021{" "}
           <a href="https://arifsamisahin.github.io/" target="_blank" rel="noopener noreferrer">
             Arif Sami

@@ -289,9 +289,11 @@ export default function TechnicalService() {
   const { url } = useRouteMatch();
   return (
     <div>
-      <Row justify="space-between" style={{ padding: "0.5rem 0" }}>
+      <Row justify="space-between" style={{ paddingBottom: 16 }}>
         <Col>
-          <Title level={3}>Teknik Servis İşlemleri</Title>
+          <Title level={3} style={{ margin: 0 }}>
+            Teknik Servis İşlemleri
+          </Title>
         </Col>
         <Col>
           <Link to={`${url}/create`}>

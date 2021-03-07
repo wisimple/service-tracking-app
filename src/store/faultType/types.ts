@@ -9,9 +9,11 @@ export interface FaultType extends FaultTypeDto {
 
 export interface FaultTypeState {
   faultTypes: FaultType[];
+  selectedItem?: FaultType;
   loading?: boolean;
   cLoading?: boolean;
   dLoading?: boolean;
+  uLoading?: boolean;
 }
 
 export const FETCH_FAULTTYPES = "FETCH_FAULTYPES";
@@ -19,6 +21,7 @@ export const CREATE_FAULTTYPE = "CREATE_FAULTTYPE";
 export const UPDATE_FAULTTYPE = "UPDATE_FAULTTYPE";
 export const DELETE_FAULTTYPE = "DELETE_FAULTTYPE";
 export const SET_FAULTTYPE_LOADING = "SET_FAULTTYPE_LOADING";
+export const SELECT_FAULT_TYPE = "SELECT_FAULT_TYPE";
 
 export interface FetchFaultTypeAction {
   type: typeof FETCH_FAULTTYPES;
@@ -57,11 +60,19 @@ export interface SetLoadingAction {
   };
 }
 
+export interface SelectFaultTypeAction {
+  type: typeof SELECT_FAULT_TYPE;
+  payload: {
+    id: string;
+  };
+}
+
 export type FaultTypeActionTypes =
   | CreateFaultTypeAction
   | FetchFaultTypeAction
   | UpdateFaultTypeAction
   | DeleteFaultTypeAction
-  | SetLoadingAction;
+  | SetLoadingAction
+  | SelectFaultTypeAction;
 
 export type FaultTypeThunkActionTypes = ThunkAction<void, RootState, unknown, FaultTypeActionTypes>;

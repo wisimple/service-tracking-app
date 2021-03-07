@@ -8,6 +8,7 @@ import {
   FETCH_FAULTTYPES,
   SET_FAULTTYPE_LOADING,
   UPDATE_FAULTTYPE,
+  SELECT_FAULT_TYPE,
 } from "./types";
 
 export const fetchFaultTypes = (): FaultTypeThunkActionTypes => async (dispatch) => {
@@ -39,13 +40,13 @@ export const updateFaultType = (id: string, faultTypeDto: FaultTypeDto): FaultTy
   dispatch
 ) => {
   try {
-    dispatch(setLoading({ cLoading: true }));
+    dispatch(setLoading({ uLoading: true }));
     const { data } = await api.put(`fault-types/${id}`, faultTypeDto);
     dispatch({
       type: UPDATE_FAULTTYPE,
       payload: { faultType: data },
     });
-    dispatch(setLoading({ cLoading: false }));
+    dispatch(setLoading({ uLoading: false }));
   } catch (error) {}
 };
 
@@ -61,10 +62,16 @@ export const deleteFaultType = (id: string): FaultTypeThunkActionTypes => async 
   } catch (error) {}
 };
 
+export const selectFaultType = (id: string): FaultTypeActionTypes => ({
+  type: SELECT_FAULT_TYPE,
+  payload: { id },
+});
+
 const setLoading = (data: {
   cLoading?: boolean;
   loading?: boolean;
   dLoading?: boolean;
+  uLoading?: boolean;
 }): FaultTypeActionTypes => {
   return {
     type: SET_FAULTTYPE_LOADING,

@@ -6,6 +6,7 @@ import {
   UPDATE_FAULTTYPE,
   CREATE_FAULTTYPE,
   SET_FAULTTYPE_LOADING,
+  SELECT_FAULT_TYPE,
 } from "./types";
 
 const initialState: FaultTypeState = {
@@ -25,11 +26,16 @@ export default function faultTypeReducer(state = initialState, action: FaultType
       return {
         ...state,
         faultTypes: state.faultTypes.map((fT) => (fT._id === faultType._id ? faultType : fT)),
+        selectedItem: undefined,
       };
     }
     case DELETE_FAULTTYPE: {
       const { faultType } = action.payload;
       return { ...state, faultTypes: state.faultTypes.filter((fT) => fT._id !== faultType._id) };
+    }
+
+    case SELECT_FAULT_TYPE: {
+      return { ...state, selectedItem: state.faultTypes.find((fT) => fT._id === action.payload.id) };
     }
 
     case SET_FAULTTYPE_LOADING:
