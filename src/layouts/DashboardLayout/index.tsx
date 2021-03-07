@@ -9,7 +9,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const getPathName = (pathName: string) => {
   if (pathName.length === 24) {
-    return "Göster";
+    return "Detay";
   }
   switch (pathName) {
     case "":
@@ -49,7 +49,7 @@ const DashboardLayout = ({ children }: Props) => {
     <Layout>
       <Sider breakpoint="lg" collapsedWidth="0">
         <div className={styles.logo}>Logo</div>
-        <Menu defaultSelectedKeys={["/"]} mode="inline" style={{ height: "100%" }}>
+        <Menu defaultSelectedKeys={["/"]} mode="inline" theme="dark">
           <Menu.Item key="/" icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
@@ -64,13 +64,13 @@ const DashboardLayout = ({ children }: Props) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
+      <Layout style={{ minHeight: "100vh" }}>
         <Header></Header>
-        <Content style={{ marginTop: 24, padding: 16 }}>
+        <Content style={{ padding: 16 }}>
           <BreadCrumbComponent />
           {children}
         </Content>
-        <Footer>
+        <Footer style={{ textAlign: "center" }}>
           Teknik Servis Yazilimi 2021{" "}
           <a href="https://arifsamisahin.github.io/" target="_blank" rel="noopener noreferrer">
             Arif Sami

@@ -43,6 +43,7 @@ const FaultTypeCrud = () => {
         onSearch={handleCreateSubmit}
       />
       <List
+        style={{ marginTop: 8 }}
         loading={loading}
         itemLayout="horizontal"
         dataSource={faultTypes}

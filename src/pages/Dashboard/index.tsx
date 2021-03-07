@@ -6,6 +6,7 @@ import Summary from "pages/Dashboard/Summary";
 
 import TechnicalServiceList from "pages/Dashboard/TechnicalService/List";
 import TechnicalServiceCreate from "pages/Dashboard/TechnicalService/Create";
+import TechnicalServiceShow from "pages/Dashboard/TechnicalService/Show";
 
 import CustomersList from "pages/Dashboard/Customer/List";
 import CustomerCreate from "pages/Dashboard/Customer/Create";
@@ -23,6 +24,7 @@ const Dashboard = () => {
 
           <Route exact path={`${url}/technical-service`} component={TechnicalServiceList} />
           <Route exact path={`${url}/technical-service/create`} component={TechnicalServiceCreate} />
+          <Route exact path={`${url}/technical-service/:id`} component={TechnicalServiceShow} />
 
           <Route exact path={`${url}/customers`} component={CustomersList} />
           <Route exact path={`${url}/customers/create`} component={CustomerCreate} />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col } from "antd";
+import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col, InputNumber } from "antd";
 import { PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -18,6 +18,9 @@ import Avatar from "antd/lib/avatar/avatar";
 import { getCustomerAvatarSrc } from "helpers";
 import FaultTypeCrud from "components/FaultTypeCrud";
 import { fetchFaultTypes } from "store/faultType/actions";
+import { TechnicalServiceDto } from "dto";
+import { createTechnicalService } from "store/technicalService/actions";
+import { useHistory } from "react-router";
 
 const { TextArea } = Input;
 
@@ -27,8 +30,10 @@ const ServiceForm = () => {
   const { products, loading: productLoading } = useSelector((state: RootState) => state.productState);
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { faultTypes, loading: faultLoading } = useSelector((state: RootState) => state.faultTypeState);
+  const { cloading: serviceCreateLoading } = useSelector((state: RootState) => state.servicesState);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [form] = Form.useForm();
   const [selectedProduct, setselectedProduct] = useState<Product | null>();
@@ -42,6 +47,11 @@ const ServiceForm = () => {
       dispatch(fetchCustomers());
     }
   }, []);
+
+  const handleOnSubmit = async (values: TechnicalServiceDto) => {
+    await dispatch(createTechnicalService(values));
+    history.goBack();
+  };
   return (
     <>
       <Modal
@@ -66,11 +76,11 @@ const ServiceForm = () => {
         size="large"
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
-        onFinish={(values) => console.log(values)}
+        onFinish={handleOnSubmit}
       >
         <Form.Item
           label="Müşteri"
-          name={["customer", "_id"]}
+          name="customerId"
           required
           rules={[{ required: true, message: "Lütfen müşteri seçiniz" }]}
         >
@@ -102,11 +112,11 @@ const ServiceForm = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Talep" name={["customer", "demand"]}>
+        <Form.Item label="Talep" name="demand">
           <TextArea />
         </Form.Item>
 
-        <Divider plain orientation="left">
+        <Divider orientation="left" style={{ paddingTop: 30 }}>
           Cihaz Bilgileri
         </Divider>
 
@@ -202,8 +212,11 @@ const ServiceForm = () => {
         <Form.Item label="Imei/Seri Numarası" name={["device", "serialNumber"]}>
           <Input />
         </Form.Item>
+        <Form.Item label="Cihaz Parolası" name={["device", "passOrPattern"]}>
+          <Input />
+        </Form.Item>
 
-        <Form.Item label="Cihaz Resimleri" name="images">
+        <Form.Item label="Cihaz Resimleri" name={["device", "image"]}>
           <Upload name="images[]" listType="picture" fileList={[]} multiple>
             <Button icon={<UploadOutlined />} size="middle">
               Resimleri Seç
@@ -211,11 +224,11 @@ const ServiceForm = () => {
           </Upload>
         </Form.Item>
 
-        <Divider plain orientation="left">
+        <Divider orientation="left" style={{ paddingTop: 30 }}>
           Servis Bilgileri
         </Divider>
 
-        <Form.Item label="Durum" name="staus" initialValue={3}>
+        <Form.Item label="Durum" name="status" initialValue={3}>
           <Radio.Group buttonStyle="solid" size="middle">
             {technicServiceStatusTypes.map((item) => (
               <Radio.Button key={item.value} value={item.value} style={{ marginBottom: "6px" }}>
@@ -258,7 +271,7 @@ const ServiceForm = () => {
           <TextArea rows={3} />
         </Form.Item>
 
-        <Form.Item label="Verilen Garanti Süresi" name="warrantyDuration" initialValue={0}>
+        <Form.Item label="Verilen Garanti Süresi" name="warrantyDays" initialValue={0}>
           <Select placeholder="Garanti Süresini Seçiniz">
             {warrantyDurations.map((item) => (
               <Select.Option key={item.value} value={item.value}>
@@ -268,7 +281,7 @@ const ServiceForm = () => {
           </Select>
         </Form.Item>
 
-        <Divider plain orientation="left">
+        <Divider orientation="left" style={{ paddingTop: 30 }}>
           Ücret Bilgileri
         </Divider>
 
@@ -278,7 +291,7 @@ const ServiceForm = () => {
             name="totalCost"
             style={{ display: "inline-block", width: "120px" }}
           >
-            <Input type="number" addonAfter="₺" />
+            <InputNumber />
           </Form.Item>
 
           <Form.Item
@@ -286,15 +299,12 @@ const ServiceForm = () => {
             name="paidAmount"
             style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}
           >
-            <Input type="number" addonAfter="₺" />
+            <InputNumber />
           </Form.Item>
-          {/* <Form.Item label="Kalan" style={{ display: "inline-block", width: "120px", marginLeft: "8px" }}>
-            <Input disabled />
-          </Form.Item> */}
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 4 }}>
-          <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={serviceCreateLoading}>
             KAYDET
           </Button>
         </Form.Item>

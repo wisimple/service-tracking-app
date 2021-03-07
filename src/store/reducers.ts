@@ -4,6 +4,7 @@ import customerReducer from "./customer/reducers";
 import faultTypeReducer from "./faultType/reducers";
 import productReducer from "./product/reducers";
 import productCategoryReducer from "./productCategory/reducers";
+import technicalServiceReducer from "./technicalService/reducers";
 
 export const rootReducer = combineReducers({
   productCategoryState: productCategoryReducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   productState: productReducer,
   customerState: customerReducer,
   faultTypeState: faultTypeReducer,
+  servicesState: technicalServiceReducer,
 });

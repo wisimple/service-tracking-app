@@ -1,292 +1,29 @@
-import { Table, Button, Typography, Row, Col } from "antd";
-import React from "react";
+import { useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
+import { Table, Button, Typography, Row, Col } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+
+import { RootState } from "store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTechnicalServices } from "store/technicalService/actions";
+import { ICustomer, ITechicalService } from "interfaces";
+import { technicServiceStatusTypes } from "constants/index";
+import { getCustomerAvatarSrc, getTechnicalServiceStatusType } from "helpers";
+import Avatar from "antd/lib/avatar/avatar";
 
 const { Column } = Table;
 const { Title } = Typography;
 
-const data = [
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-  {
-    _id: "1",
-    customerId: { _id: "12121", name: "Kucuk Suslu Telefon" },
-    status: "Bekliyor",
-    cost: 350,
-    faultType: {
-      _id: "234234",
-      name: "Ekran Kirigi",
-    },
-    cAt: "2021-02-02T00:23:38.217+00:00",
-  },
-];
-
 export default function TechnicalService() {
+  const { services, loading } = useSelector((state: RootState) => state.servicesState);
   const { url } = useRouteMatch();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (services.length === 0) {
+      dispatch(fetchTechnicalServices());
+    }
+  }, []);
   return (
     <div>
       <Row justify="space-between" style={{ paddingBottom: 16 }}>
@@ -303,21 +40,26 @@ export default function TechnicalService() {
           </Link>
         </Col>
       </Row>
-      <Table dataSource={data} rowKey="_id" pagination={{ pageSize: 20 }}>
+      <Table dataSource={services} loading={loading} rowKey="_id" pagination={{ pageSize: 20 }}>
         <Column
           title="Müşteri"
-          dataIndex="customerId"
-          render={(c: { _id: string; name: string }) => <Link to="/dashboard/customer/id">{c.name}</Link>}
+          render={({ customerId }: ITechicalService) => (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8 }} />
+              <Link to={`customers/${customerId._id}`}>{customerId.name}</Link>
+            </div>
+          )}
         />
         <Column
-          title="Arıza Tipi"
-          dataIndex="faultType"
-          render={(type: { _id: string; name: string }) => {
-            return type.name;
-          }}
+          title="Durum"
+          dataIndex="status"
+          render={(status: number) => <div>{getTechnicalServiceStatusType(status).text}</div>}
         />
-        <Column title="Durum" dataIndex="status" />
-        <Column title="Ücret" dataIndex="cost" />
+        <Column
+          title="Arıza"
+          render={({ faultTypeId }: ITechicalService) => <div>{faultTypeId?.name}</div>}
+        />
+        <Column title="Ücret" dataIndex="totalCost" />
         <Column
           title="Tarih"
           dataIndex="cAt"
@@ -327,10 +69,10 @@ export default function TechnicalService() {
         />
         <Column
           title="İşlem"
-          render={() => {
+          render={(item: ITechicalService) => {
             return (
               <Button type="dashed">
-                <Link to={`${url}/id`}>İşlem Yap</Link>
+                <Link to={`${url}/${item._id}`}>İşlem Yap</Link>
               </Button>
             );
           }}
