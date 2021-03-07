@@ -19,9 +19,7 @@ const CustomerIndex = () => {
   const { url } = useRouteMatch();
 
   useEffect(() => {
-    if (customers.length === 0) {
-      dispatch(fetchCustomers());
-    }
+    dispatch(fetchCustomers());
   }, []);
 
   return (

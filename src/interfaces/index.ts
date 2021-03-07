@@ -4,6 +4,24 @@ interface IMongoDefaults {
   uAt?: string;
 }
 
+export interface IProductCategory {
+  _id: string;
+  name: string;
+}
+
+export interface IBrand {
+  _id: string;
+  name: string;
+  catId: IProductCategory;
+}
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  brandId: IBrand;
+  imgFile?: string;
+}
+
 export interface ICustomer extends IMongoDefaults {
   name: string;
   idNumber?: string;
@@ -22,33 +40,17 @@ export interface IFaultType {
   dAt?: string;
 }
 
-export interface IProductCategory {
-  _id: string;
-  name: string;
-}
-
-export interface IBrand {
-  _id: string;
-  catId: string;
-  name: string;
-}
-
-export interface IProduct {
-  _id: string;
-  brandId: string;
-  name: string;
-}
-
 export interface ITechicalService extends IMongoDefaults {
   customerId: ICustomer;
   demand?: string;
   desc?: string;
   device?: {
-    categoryId?: string | IProductCategory;
-    brandId?: string | IBrand;
-    productId?: string | IProduct;
+    categoryId?: string;
+    brandId?: IBrand;
+    productId?: IProduct;
     serialNumber?: string;
     imageFileNames?: string[];
+    passOrPattern?: string;
   };
   faultTypeId?: IFaultType;
   status: number;

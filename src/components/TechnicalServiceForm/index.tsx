@@ -15,43 +15,53 @@ import { fetchCustomers } from "store/customer/actions";
 import Modal from "antd/lib/modal/Modal";
 import CustomerForm from "components/CustomerForm";
 import Avatar from "antd/lib/avatar/avatar";
-import { getCustomerAvatarSrc } from "helpers";
+import { getCustomerAvatarSrc, getDeviceImageUrl } from "helpers";
 import FaultTypeCrud from "components/FaultTypeCrud";
 import { fetchFaultTypes } from "store/faultType/actions";
 import { TechnicalServiceDto } from "dto";
-import { createTechnicalService } from "store/technicalService/actions";
+import { createTechnicalService, updateTechnicalService } from "store/technicalService/actions";
 import { useHistory } from "react-router";
+import { IProduct, ITechicalService } from "interfaces";
 
 const { TextArea } = Input;
 
-const ServiceForm = () => {
+interface Props {
+  data?: ITechicalService;
+}
+
+const ServiceForm = ({ data }: Props) => {
   const { categories, loading } = useSelector((state: RootState) => state.productCategoryState);
   const { brands, loading: brandLoading } = useSelector((state: RootState) => state.brandState);
   const { products, loading: productLoading } = useSelector((state: RootState) => state.productState);
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { faultTypes, loading: faultLoading } = useSelector((state: RootState) => state.faultTypeState);
-  const { cloading: serviceCreateLoading } = useSelector((state: RootState) => state.servicesState);
+  const { cloading: serviceCreateLoading, uloading: servuceUpdateLoading } = useSelector(
+    (state: RootState) => state.servicesState
+  );
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [form] = Form.useForm();
-  const [selectedProduct, setselectedProduct] = useState<Product | null>();
+  const [productImageFileName, setproductImageFileName] = useState<string | undefined>();
   const [isCustomerModalOpen, setisCustomerModalOpen] = useState(false);
   const [isFaultTypeModalOpen, setisFaultTypeModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProductCategories());
     dispatch(fetchFaultTypes());
-    if (customers.length === 0) {
-      dispatch(fetchCustomers());
-    }
+    dispatch(fetchCustomers());
+    dispatch(fetchProductCategories());
   }, []);
 
   const handleOnSubmit = async (values: TechnicalServiceDto) => {
-    await dispatch(createTechnicalService(values));
+    if (data) {
+      await dispatch(updateTechnicalService(data._id, values));
+    } else {
+      await dispatch(createTechnicalService(values));
+    }
     history.goBack();
   };
+
   return (
     <>
       <Modal
@@ -120,14 +130,10 @@ const ServiceForm = () => {
           Cihaz Bilgileri
         </Divider>
 
-        {selectedProduct?.imgFile && (
+        {productImageFileName && (
           <Row justify="center" style={{ marginBottom: "1.5rem" }}>
             <Col>
-              <img
-                src={`https://fdn2.gsmarena.com/vv/bigpic/${selectedProduct.imgFile}`}
-                height={150}
-                width="auto"
-              />
+              <img src={getDeviceImageUrl(productImageFileName)} height={150} width="auto" />
             </Col>
           </Row>
         )}
@@ -140,12 +146,12 @@ const ServiceForm = () => {
                 placeholder="Cihaz Tipi"
                 allowClear
                 onSelect={(value: string) => {
-                  setselectedProduct(undefined);
+                  setproductImageFileName(undefined);
                   form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
                   dispatch(fetchBrandsByCategory(value));
                 }}
                 onClear={() => {
-                  setselectedProduct(undefined);
+                  setproductImageFileName(undefined);
                   form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
                   dispatch(resetBrands());
                   dispatch(resetProducts());
@@ -168,11 +174,11 @@ const ServiceForm = () => {
                 allowClear
                 onSelect={(value: string) => {
                   form.setFieldsValue({ device: { productId: undefined } });
-                  setselectedProduct(undefined);
+                  setproductImageFileName(undefined);
                   dispatch(fetchProductsByBrand(value));
                 }}
                 onClear={() => {
-                  setselectedProduct(undefined);
+                  setproductImageFileName(undefined);
                   form.setFieldsValue({ device: { productId: undefined } });
                   dispatch(resetProducts());
                 }}
@@ -197,7 +203,9 @@ const ServiceForm = () => {
                 filterOption={(input, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
-                onChange={(value: string) => setselectedProduct(products.find((p) => p._id === value))}
+                onChange={(value: string) =>
+                  setproductImageFileName(products.find((p) => p._id === value)?.imgFile || undefined)
+                }
               >
                 {products.map((item) => (
                   <Select.Option key={item._id} value={item._id}>
@@ -267,7 +275,7 @@ const ServiceForm = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Yapılan İşlemler / Açıklama" name="description">
+        <Form.Item label="Yapılan İşlemler / Açıklama" name="desc">
           <TextArea rows={3} />
         </Form.Item>
 
@@ -304,9 +312,15 @@ const ServiceForm = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 4 }}>
-          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={serviceCreateLoading}>
-            KAYDET
-          </Button>
+          {data ? (
+            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={servuceUpdateLoading}>
+              GÜNCELLE
+            </Button>
+          ) : (
+            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={serviceCreateLoading}>
+              KAYDET
+            </Button>
+          )}
         </Form.Item>
       </Form>
     </>

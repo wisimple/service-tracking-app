@@ -3,9 +3,11 @@ import api from "utils/api";
 import {
   CREATE_TECHNICAL_SERVICE,
   FETCH_TECHNICAL_SERVICES,
+  GET_TECHNICAL_SERVICE,
   SET_TECHNICAL_SERVICE_LOADING,
   TechnicalServiceActionTypes,
   TechnicalServiceThunkActionTypes,
+  UPDATE_TECHNICAL_SERVICE,
 } from "./types";
 
 export const fetchTechnicalServices = (): TechnicalServiceThunkActionTypes => async (dispatch) => {
@@ -25,6 +27,27 @@ export const createTechnicalService = (
     const { data } = await api.post("technical-services", technicalServiceDto);
     dispatch({ type: CREATE_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ cloading: false }));
+  } catch (error) {}
+};
+
+export const updateTechnicalService = (
+  id: string,
+  technicalServiceDto: TechnicalServiceDto
+): TechnicalServiceThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ uloading: true }));
+    const { data } = await api.put(`technical-services/${id}`, technicalServiceDto);
+    dispatch({ type: UPDATE_TECHNICAL_SERVICE, payload: { service: data } });
+    dispatch(setLoading({ uloading: false }));
+  } catch (error) {}
+};
+
+export const getTechnicalService = (id: string): TechnicalServiceThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ loading: true }));
+    const { data } = await api.get(`technical-services/${id}`);
+    dispatch({ type: GET_TECHNICAL_SERVICE, payload: { service: data } });
+    dispatch(setLoading({ loading: false }));
   } catch (error) {}
 };
 

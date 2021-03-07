@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col } from "antd";
+import { Table, Button, Typography, Row, Col, Popover, List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTechnicalServices } from "store/technicalService/actions";
-import { ICustomer, ITechicalService } from "interfaces";
-import { technicServiceStatusTypes } from "constants/index";
-import { getCustomerAvatarSrc, getTechnicalServiceStatusType } from "helpers";
+import { ITechicalService } from "interfaces";
+import { getCustomerAvatarSrc, getDeviceImageUrl, getTechnicalServiceStatusType } from "helpers";
 import Avatar from "antd/lib/avatar/avatar";
 
 const { Column } = Table;
@@ -20,9 +19,7 @@ export default function TechnicalService() {
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (services.length === 0) {
-      dispatch(fetchTechnicalServices());
-    }
+    dispatch(fetchTechnicalServices());
   }, []);
   return (
     <div>
@@ -44,9 +41,46 @@ export default function TechnicalService() {
         <Column
           title="Müşteri"
           render={({ customerId }: ITechicalService) => (
+            <Popover
+              title={customerId.name}
+              content={
+                <div>
+                  <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
+                    {customerId.contact?.phone && (
+                      <li>
+                        <strong>İletişim:</strong>{" "}
+                        <a href={`tel:${customerId.contact.phone}`}>{customerId.contact.phone}</a>
+                      </li>
+                    )}
+                    {customerId.desc && (
+                      <li>
+                        <strong>Açıklama / Not:</strong> {customerId.desc}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              }
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8 }} />
+                {customerId.name}
+              </div>
+            </Popover>
+          )}
+        />
+        <Column
+          title="Cihaz"
+          render={({ device }: ITechicalService) => (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8 }} />
-              <Link to={`customers/${customerId._id}`}>{customerId.name}</Link>
+              {device?.productId?.imgFile && (
+                <img
+                  src={getDeviceImageUrl(device.productId.imgFile)}
+                  height={35}
+                  width="auto"
+                  style={{ marginRight: 8 }}
+                />
+              )}
+              {device?.brandId?.name} {device?.productId?.name}
             </div>
           )}
         />
