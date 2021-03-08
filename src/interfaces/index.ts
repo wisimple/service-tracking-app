@@ -56,4 +56,5 @@ export interface ITechicalService extends IMongoDefaults {
   status: number;
   totalCost?: number;
   paidAmount?: number;
+  warrantyDays?: number;
 }

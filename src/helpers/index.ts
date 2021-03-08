@@ -9,6 +9,14 @@ export const getDeviceImageUrl = (fileName: string): string => {
   return "https://fdn2.gsmarena.com/vv/bigpic/" + fileName;
 };
 
-export const getTechnicalServiceStatusType = (status: number): { value: number; text: string } => {
-  return technicServiceStatusTypes.find((type) => type.value === status) || { value: 0, text: "none" };
+export const getTechnicalServiceStatusType = (
+  status: number
+): { value: number; text: string; color: string } => {
+  return (
+    technicServiceStatusTypes.find((type) => type.value === status) || {
+      value: 0,
+      text: "none",
+      color: "grey",
+    }
+  );
 };

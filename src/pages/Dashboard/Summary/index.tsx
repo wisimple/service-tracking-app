@@ -1,9 +1,20 @@
-import React from "react";
+import { Card, Col, Row } from "antd";
+// import styled from "styled-components";
 
 const index = () => {
   return (
     <div>
-      <h1>ozet</h1>
+      <Row gutter={{ sm: 16 }}>
+        <Col span={8}>
+          <Card>he</Card>
+        </Col>
+        <Col span={8}>
+          <Card>merhabasdfsdfdsf</Card>
+        </Col>
+        <Col span={8}>
+          <Card>he</Card>
+        </Col>
+      </Row>
     </div>
   );
 };

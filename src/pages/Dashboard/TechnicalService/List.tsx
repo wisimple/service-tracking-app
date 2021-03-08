@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col, Popover, List } from "antd";
+import { Table, Button, Typography, Row, Col, Popover, List, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
@@ -10,6 +10,7 @@ import { fetchTechnicalServices } from "store/technicalService/actions";
 import { ITechicalService } from "interfaces";
 import { getCustomerAvatarSrc, getDeviceImageUrl, getTechnicalServiceStatusType } from "helpers";
 import Avatar from "antd/lib/avatar/avatar";
+import Money from "components/Money";
 
 const { Column } = Table;
 const { Title } = Typography;
@@ -37,7 +38,13 @@ export default function TechnicalService() {
           </Link>
         </Col>
       </Row>
-      <Table dataSource={services} loading={loading} rowKey="_id" pagination={{ pageSize: 20 }}>
+      <Table
+        dataSource={services}
+        loading={loading}
+        rowKey="_id"
+        pagination={{ pageSize: 20 }}
+        style={{ overflowY: "scroll" }}
+      >
         <Column
           title="Müşteri"
           render={({ customerId }: ITechicalService) => (
@@ -62,7 +69,7 @@ export default function TechnicalService() {
               }
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8 }} />
+                <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8, flexShrink: 0 }} />
                 {customerId.name}
               </div>
             </Popover>
@@ -87,13 +94,16 @@ export default function TechnicalService() {
         <Column
           title="Durum"
           dataIndex="status"
-          render={(status: number) => <div>{getTechnicalServiceStatusType(status).text}</div>}
+          render={(status: number) => {
+            const { text, color } = getTechnicalServiceStatusType(status);
+            return <Tag color={color}>{text}</Tag>;
+          }}
         />
         <Column
           title="Arıza"
           render={({ faultTypeId }: ITechicalService) => <div>{faultTypeId?.name}</div>}
         />
-        <Column title="Ücret" dataIndex="totalCost" />
+        <Column title="Ücret" dataIndex="totalCost" render={(amount) => <Money amount={amount} />} />
         <Column
           title="Tarih"
           dataIndex="cAt"

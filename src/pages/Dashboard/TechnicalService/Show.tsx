@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTechnicalService } from "store/technicalService/actions";
 import { useParams } from "react-router";
 import { RootState } from "store";
+import { Card, Skeleton, Spin } from "antd";
 
 const Show = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,11 @@ const Show = () => {
   }, []);
 
   return (
-    <div>
-      <TechnicalServiceForm data={service} />
-    </div>
+    <Card title="Teknik Servis Detayı">
+      <Spin tip="Yükleniyor..." size="large" spinning={loading}>
+        <TechnicalServiceForm data={service} />
+      </Spin>
+    </Card>
   );
 };
 

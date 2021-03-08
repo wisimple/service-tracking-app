@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Skeleton, Space, Typography } from "antd";
+import { Card, Skeleton, Space, Spin, Typography } from "antd";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomer } from "store/customer/actions";
@@ -19,19 +19,17 @@ const CustomerShow = () => {
     dispatch(getCustomer(params.id));
   }, [params.id]);
 
-  if (!loading && customer) {
-    return (
-      <>
+  return (
+    <Card title="Müşteri Detay" loading={loading}>
+      {customer && (
         <Title level={2} style={{ display: "flex", alignItems: "center" }}>
           <Avatar src={getCustomerAvatarSrc(customer)} style={{ marginRight: 8 }} />
           {customer?.name}
         </Title>
-        <CustomerForm onSubmit={() => console.log("sdfsfd")} data={customer} />
-      </>
-    );
-  } else {
-    return <Skeleton active avatar paragraph={{ rows: 5 }} />;
-  }
+      )}
+      <CustomerForm onSubmit={() => console.log("sdfsfd")} data={customer} />
+    </Card>
+  );
 };
 
 export default CustomerShow;

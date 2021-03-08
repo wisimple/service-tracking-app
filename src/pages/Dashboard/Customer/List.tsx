@@ -38,12 +38,7 @@ const CustomerIndex = () => {
           </Link>
         </Col>
       </Row>
-      <Table
-        dataSource={customers}
-        rowKey="_id"
-        pagination={{ pageSize: 20, position: ["bottomCenter"] }}
-        loading={loading}
-      >
+      <Table dataSource={customers} rowKey="_id" pagination={{ pageSize: 20 }} loading={loading}>
         <Column
           title="Müşteri"
           dataIndex="name"

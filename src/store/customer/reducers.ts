@@ -24,23 +24,23 @@ export default function customerReducer(state = intialState, action: CustomerAct
       return { ...state, ...action.payload };
     case GET_CUSTOMER:
       return { ...state, customer: action.payload.customer };
-    // case CREATE_CUSTOMER:
-    //   return { ...state, customers: [action.payload.customer, ...state.customers] };
-    // case UPDATE_CUSTOMER: {
-    //   const { customer } = action.payload;
-    //   return {
-    //     ...state,
-    //     customer,
-    //     customers: state.customers.map((c) => (c._id === customer._id ? customer : c)),
-    //   };
-    // }
-    // case DELETE_CUSTOMER: {
-    //   const { customer } = action.payload;
-    //   return {
-    //     ...state,
-    //     customers: state.customers.filter((c) => c._id !== customer._id),
-    //   };
-    // }
+    case CREATE_CUSTOMER:
+      return { ...state, customers: [action.payload.customer, ...state.customers] };
+    case UPDATE_CUSTOMER: {
+      const { customer } = action.payload;
+      return {
+        ...state,
+        customer,
+        customers: state.customers.map((c) => (c._id === customer._id ? customer : c)),
+      };
+    }
+    case DELETE_CUSTOMER: {
+      const { customer } = action.payload;
+      return {
+        ...state,
+        customers: state.customers.filter((c) => c._id !== customer._id),
+      };
+    }
     default:
       return state;
   }

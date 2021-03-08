@@ -53,6 +53,36 @@ const ServiceForm = ({ data }: Props) => {
     dispatch(fetchProductCategories());
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      console.log("data has changed");
+      const { device, customerId, faultTypeId } = data;
+      form.setFieldsValue({
+        ...data,
+        customerId: customerId?._id,
+        device: {
+          categoryId: device?.categoryId,
+          brandId: device?.brandId?._id,
+          productId: device?.productId?._id,
+          serialNumber: device?.serialNumber,
+          passOrPattern: device?.passOrPattern,
+        },
+        faultTypeId: faultTypeId?._id,
+      });
+      if (device?.categoryId) {
+        dispatch(fetchBrandsByCategory(device?.categoryId));
+      }
+      if (device?.brandId) {
+        dispatch(fetchProductsByBrand(device?.brandId._id));
+      }
+      if (device?.productId?.imgFile) {
+        setproductImageFileName(device.productId.imgFile);
+      } else {
+        setproductImageFileName(undefined);
+      }
+    }
+  }, [data]);
+
   const handleOnSubmit = async (values: TechnicalServiceDto) => {
     if (data) {
       await dispatch(updateTechnicalService(data._id, values));

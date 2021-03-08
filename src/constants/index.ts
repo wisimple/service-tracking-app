@@ -1,10 +1,10 @@
 export const technicServiceStatusTypes = [
-  { value: 0, text: "İade" },
-  { value: 1, text: "Bekliyor" },
-  { value: 2, text: "Parça Bekleniyor" },
-  { value: 3, text: "Tamir Ediliyor" },
-  { value: 4, text: "Hazır" },
-  { value: 5, text: "Teslim Edildi" },
+  { value: 0, text: "İade", color: "red" },
+  { value: 1, text: "Bekliyor", color: "orange" },
+  { value: 2, text: "Parça Bekleniyor", color: "purple" },
+  { value: 3, text: "Tamir Ediliyor", color: "blue" },
+  { value: 4, text: "Hazır", color: "green" },
+  { value: 5, text: "Teslim Edildi", color: "#87d068" },
 ];
 
 export const warrantyDurations = [

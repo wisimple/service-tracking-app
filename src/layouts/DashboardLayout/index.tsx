@@ -1,11 +1,24 @@
 import { Breadcrumb, Layout, Menu } from "antd";
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { DesktopOutlined, ToolOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
 import { Link, useLocation, useRouteMatch } from "react-router-dom";
 
 const { Header, Footer, Sider, Content } = Layout;
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
+}
 
 const getPathName = (pathName: string) => {
   if (pathName.length === 24) {
@@ -44,12 +57,23 @@ interface Props {
 
 const DashboardLayout = ({ children }: Props) => {
   const { url } = useRouteMatch();
+  const [width, height] = useWindowSize();
 
   return (
     <Layout>
-      <Sider breakpoint="lg" collapsedWidth="0">
+      <Sider
+        collapsedWidth="0"
+        breakpoint="lg"
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+        }}
+        theme="light"
+      >
         <div className={styles.logo}>Logo</div>
-        <Menu defaultSelectedKeys={["/"]} mode="inline" theme="dark">
+        <Menu defaultSelectedKeys={["/"]} mode="inline">
           <Menu.Item key="/" icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
@@ -64,7 +88,7 @@ const DashboardLayout = ({ children }: Props) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout style={{ minHeight: "100vh", marginLeft: 200 }}>
         <Header></Header>
         <Content style={{ padding: 16 }}>
           <BreadCrumbComponent />
