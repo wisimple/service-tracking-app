@@ -1,22 +1,46 @@
-import { Card, Col, Row } from "antd";
-// import styled from "styled-components";
+import { Card, Col, Row, Typography } from "antd";
+import { getTechnicalServiceStatusType } from "helpers";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useRouteMatch } from "react-router-dom";
+import { RootState } from "store";
+import { getTechnicalServicesSummary } from "store/technicalService/actions";
 
-const index = () => {
+const { Title } = Typography;
+const Summary = () => {
+  const { url } = useRouteMatch();
+  const dispatch = useDispatch();
+  const { summary, loading } = useSelector((state: RootState) => state.servicesState);
+
+  useEffect(() => {
+    dispatch(getTechnicalServicesSummary());
+  }, []);
   return (
     <div>
+      <Title level={3}>Teknik Servis Durumu</Title>
       <Row gutter={{ sm: 16 }}>
-        <Col span={8}>
-          <Card>he</Card>
-        </Col>
-        <Col span={8}>
-          <Card>merhabasdfsdfdsf</Card>
-        </Col>
-        <Col span={8}>
-          <Card>he</Card>
-        </Col>
+        {[1, 3, 5].map((i) => {
+          const status = getTechnicalServiceStatusType(i);
+          return (
+            <Col key={i} span={8}>
+              <Link to={`${url}/technical-services`}>
+                <Card
+                  loading={loading}
+                  hoverable
+                  style={{ background: `url("./images/bg/wave.jpg")`, backgroundSize: "cover" }}
+                >
+                  <h5 style={{ fontSize: 26 }}>
+                    {summary?.find((sum) => sum._id === status.value)?.count} adet
+                  </h5>
+                  <h3 style={{ fontSize: 20, textAlign: "right", margin: 0 }}>{status.text}</h3>
+                </Card>
+              </Link>
+            </Col>
+          );
+        })}
       </Row>
     </div>
   );
 };
 
-export default index;
+export default Summary;

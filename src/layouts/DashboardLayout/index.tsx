@@ -77,8 +77,8 @@ const DashboardLayout = ({ children }: Props) => {
           <Menu.Item key="/" icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
-          <Menu.Item key="/technical-service" icon={<ToolOutlined />}>
-            <Link to={`${url}/technical-service`}>Teknik Servis</Link>
+          <Menu.Item key="/technical-services" icon={<ToolOutlined />}>
+            <Link to={`${url}/technical-services`}>Teknik Servis</Link>
           </Menu.Item>
           <Menu.Item key="/customers" icon={<TeamOutlined />}>
             <Link to={`${url}/customers`}>Müşterilerim</Link>

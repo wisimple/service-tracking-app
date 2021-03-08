@@ -103,7 +103,24 @@ export default function TechnicalService() {
           title="Arıza"
           render={({ faultTypeId }: ITechicalService) => <div>{faultTypeId?.name}</div>}
         />
-        <Column title="Ücret" dataIndex="totalCost" render={(amount) => <Money amount={amount} />} />
+        <Column
+          title="Ücret"
+          render={({ paidAmount, totalCost }: ITechicalService) => {
+            const debt = (totalCost || 0) - (paidAmount || 0);
+            return (
+              <>
+                <div>
+                  <Money amount={totalCost} color={debt === 0 ? "green" : ""} />
+                </div>
+                {debt !== 0 && (
+                  <div style={{ fontSize: "12px" }}>
+                    <Money amount={debt} size="small" color="red" /> (Kalan)
+                  </div>
+                )}
+              </>
+            );
+          }}
+        />
         <Column
           title="Tarih"
           dataIndex="cAt"

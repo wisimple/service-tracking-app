@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled.span<WrapperProps>`
   font-family: "Roboto Mono", Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: ${({ size }) => (size === "small" ? "12px" : size === "large" ? "18px" : "14px")};
+  color: ${({ color }) => (color ? color : "inherit")};
 `;
 
 const StyledCurrency = styled.span`
@@ -10,14 +11,21 @@ const StyledCurrency = styled.span`
   font-size: 12px;
 `;
 
-interface Props {
-  amount?: number;
+interface WrapperProps {
+  readonly color?: string;
+  readonly size?: string;
 }
 
-const Money = ({ amount }: Props) => {
+interface Props {
+  amount?: number;
+  color?: string;
+  size?: "small" | "large";
+}
+
+const Money = ({ amount, color, size }: Props) => {
   if (amount)
     return (
-      <Wrapper>
+      <Wrapper color={color} size={size}>
         {amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}
         <StyledCurrency>₺</StyledCurrency>
       </Wrapper>

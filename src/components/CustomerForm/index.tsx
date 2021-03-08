@@ -1,5 +1,5 @@
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Popconfirm, Radio } from "antd";
+import { Button, Form, Input, Popconfirm, Radio, message } from "antd";
 import { CustomerDto } from "dto";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,9 +24,11 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
 
   const handleSubmit = async (values: CustomerDto) => {
     if (data) {
-      dispatch(updateCustomer(data._id, values));
+      await dispatch(updateCustomer(data._id, values));
+      message.success("Müşteri bilgileri başarıyla güncellendi");
     } else {
       await dispatch(createCustomer(values));
+      message.success("Yeni müşteri başarıyla oluşturuldu");
     }
     onSubmit();
   };

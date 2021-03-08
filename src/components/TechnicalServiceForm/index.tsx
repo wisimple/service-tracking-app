@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col, InputNumber } from "antd";
+import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col, InputNumber, message } from "antd";
 import { PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -86,8 +86,10 @@ const ServiceForm = ({ data }: Props) => {
   const handleOnSubmit = async (values: TechnicalServiceDto) => {
     if (data) {
       await dispatch(updateTechnicalService(data._id, values));
+      message.success("Teknik Servis işlemi başarıyla güncellendi");
     } else {
       await dispatch(createTechnicalService(values));
+      message.success("Teknik Servis işlemi başarıyla oluşturuldu");
     }
     history.goBack();
   };
@@ -247,7 +249,7 @@ const ServiceForm = ({ data }: Props) => {
           </Input.Group>
         </Form.Item>
 
-        <Form.Item label="Imei/Seri Numarası" name={["device", "serialNumber"]}>
+        <Form.Item label="Imei / Seri No" name={["device", "serialNumber"]}>
           <Input />
         </Form.Item>
         <Form.Item label="Cihaz Parolası" name={["device", "passOrPattern"]}>

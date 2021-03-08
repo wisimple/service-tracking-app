@@ -58,3 +58,8 @@ export interface ITechicalService extends IMongoDefaults {
   paidAmount?: number;
   warrantyDays?: number;
 }
+
+export interface TechnicalServiceSummary {
+  _id: number;
+  count: number;
+}

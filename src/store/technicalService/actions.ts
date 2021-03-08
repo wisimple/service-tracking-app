@@ -4,6 +4,7 @@ import {
   CREATE_TECHNICAL_SERVICE,
   FETCH_TECHNICAL_SERVICES,
   GET_TECHNICAL_SERVICE,
+  GET_TECHNICAL_SERVICE_SUMMARY,
   SET_TECHNICAL_SERVICE_LOADING,
   TechnicalServiceActionTypes,
   TechnicalServiceThunkActionTypes,
@@ -47,6 +48,15 @@ export const getTechnicalService = (id: string): TechnicalServiceThunkActionType
     dispatch(setLoading({ loading: true }));
     const { data } = await api.get(`technical-services/${id}`);
     dispatch({ type: GET_TECHNICAL_SERVICE, payload: { service: data } });
+    dispatch(setLoading({ loading: false }));
+  } catch (error) {}
+};
+
+export const getTechnicalServicesSummary = (): TechnicalServiceThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ loading: true }));
+    const { data } = await api.get(`technical-services/summary`);
+    dispatch({ type: GET_TECHNICAL_SERVICE_SUMMARY, payload: { summary: data } });
     dispatch(setLoading({ loading: false }));
   } catch (error) {}
 };

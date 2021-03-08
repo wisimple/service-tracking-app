@@ -7,6 +7,7 @@ import {
   DELETE_TECHNICAL_SERVICE,
   GET_TECHNICAL_SERVICE,
   SET_TECHNICAL_SERVICE_LOADING,
+  GET_TECHNICAL_SERVICE_SUMMARY,
 } from "./types";
 
 const initialState: TechnicalServiceState = {
@@ -46,6 +47,11 @@ export default function technicalServiceReducer(
 
     case SET_TECHNICAL_SERVICE_LOADING: {
       return { ...state, ...action.payload };
+    }
+
+    case GET_TECHNICAL_SERVICE_SUMMARY: {
+      const { summary } = action.payload;
+      return { ...state, summary };
     }
 
     default:

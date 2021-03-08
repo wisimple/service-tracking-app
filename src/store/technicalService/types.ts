@@ -1,10 +1,11 @@
-import { ITechicalService } from "interfaces";
+import { ITechicalService, TechnicalServiceSummary } from "interfaces";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "store";
 
 export interface TechnicalServiceState {
   services: ITechicalService[];
   service?: ITechicalService;
+  summary?: TechnicalServiceSummary[];
   loading?: boolean;
   cloading?: boolean;
   uloading?: boolean;
@@ -18,6 +19,8 @@ export const DELETE_TECHNICAL_SERVICE = "DELETE_TECHNICAL_SERVICE";
 export const GET_TECHNICAL_SERVICE = "GET_TECHNICAL_SERVICE";
 
 export const SET_TECHNICAL_SERVICE_LOADING = "SET_TECHNICAL_SERVICE_LOADING";
+
+export const GET_TECHNICAL_SERVICE_SUMMARY = "GET_TECHNICAL_SERVICE_SUMMARY";
 
 interface FetchTechnicalServicesAction {
   type: typeof FETCH_TECHNICAL_SERVICES;
@@ -64,13 +67,21 @@ interface SetLoadingAction {
   };
 }
 
+interface GetTechnicalServiceSummary {
+  type: typeof GET_TECHNICAL_SERVICE_SUMMARY;
+  payload: {
+    summary: TechnicalServiceSummary[];
+  };
+}
+
 export type TechnicalServiceActionTypes =
   | FetchTechnicalServicesAction
   | CreateTechnicalServiceAction
   | GetTechnicalServiceAction
   | UpdateTechnicalServiceAction
   | DeleteTechnicalServiceAction
-  | SetLoadingAction;
+  | SetLoadingAction
+  | GetTechnicalServiceSummary;
 
 export type TechnicalServiceThunkActionTypes = ThunkAction<
   void,
