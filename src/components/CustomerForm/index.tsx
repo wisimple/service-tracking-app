@@ -37,7 +37,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   const handleDelete = async () => {
     if (data) {
       await dispatch(deleteCustomer(data._id));
-      history.replace(url + "/customers");
+      history.replace("/dashboard/customers");
     }
   };
 
