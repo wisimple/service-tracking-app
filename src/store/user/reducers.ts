@@ -24,7 +24,9 @@ export default function userReducer(state = initialState, action: UserActionType
       return { ...state, ...action.payload };
 
     case SIGNOUT_USER:
+      return { ...initialState, token: undefined };
+
     default:
-      return initialState;
+      return state;
   }
 }

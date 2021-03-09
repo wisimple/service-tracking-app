@@ -3,7 +3,7 @@ import { Button, Form, Input, Popconfirm, Radio, message, Row, Col } from "antd"
 import { CustomerDto } from "dto";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory, useLocation, useRouteMatch } from "react-router";
 import { RootState } from "store";
 import { createCustomer, deleteCustomer, updateCustomer } from "store/customer/actions";
 import { Customer } from "store/customer/types";
@@ -19,6 +19,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   const { cLoading, dLoading } = useSelector((state: RootState) => state.customerState);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { url } = useRouteMatch();
 
   const [showGender, setshowGender] = useState(true);
 
@@ -36,7 +37,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   const handleDelete = async () => {
     if (data) {
       await dispatch(deleteCustomer(data._id));
-      history.goBack();
+      history.replace(url + "/customers");
     }
   };
 

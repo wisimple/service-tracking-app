@@ -29,9 +29,9 @@ export const signinUser = (userSigninDto: UserSigninDto): UserThunkActionTypes =
 };
 
 export const signoutUser = (): UserThunkActionTypes => async (dispatch) => {
-  dispatch({ type: SIGNOUT_USER });
   localStorage.clear();
-  window.location.replace("/");
+  dispatch({ type: SIGNOUT_USER });
+  // window.location.replace("/");
 };
 
 const SetLoading = (data: { loading?: boolean; signinLoading?: boolean }): UserActionTypes => ({
