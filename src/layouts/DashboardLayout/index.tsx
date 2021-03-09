@@ -1,24 +1,19 @@
 import { Breadcrumb, Layout, Menu } from "antd";
 import React, { useLayoutEffect, useState } from "react";
-import { DesktopOutlined, ToolOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
+import {
+  DesktopOutlined,
+  ToolOutlined,
+  SettingOutlined,
+  TeamOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
 import { Link, useLocation, useRouteMatch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signoutUser } from "store/user/actions";
 
 const { Header, Footer, Sider, Content } = Layout;
-
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-}
 
 const getPathName = (pathName: string) => {
   if (pathName.length === 24) {
@@ -27,7 +22,7 @@ const getPathName = (pathName: string) => {
   switch (pathName) {
     case "":
       return "Ana Ekran";
-    case "technical-service":
+    case "technical-services":
       return "Teknik Servis";
     case "customers":
       return "Müşterilerim";
@@ -57,7 +52,7 @@ interface Props {
 
 const DashboardLayout = ({ children }: Props) => {
   const { url } = useRouteMatch();
-  const [width, height] = useWindowSize();
+  const dispatch = useDispatch();
 
   return (
     <Layout>
@@ -85,6 +80,9 @@ const DashboardLayout = ({ children }: Props) => {
           </Menu.Item>
           <Menu.Item key="/settings" icon={<SettingOutlined />}>
             <Link to={`${url}/settings`}>Ayarlar</Link>
+          </Menu.Item>
+          <Menu.Item key="signout" icon={<LogoutOutlined />} onClick={() => dispatch(signoutUser())}>
+            Çıkış Yap
           </Menu.Item>
         </Menu>
       </Sider>

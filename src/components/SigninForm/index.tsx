@@ -1,57 +1,73 @@
-import { Form, Input, Button, Checkbox } from "antd";
-
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 6, span: 18 },
-};
+import { Form, Input, Button, Checkbox, Alert } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { signinUser } from "store/user/actions";
+import { UserSigninDto } from "dto";
+import { RootState } from "store";
 
 const SigninForm = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
+  const dispatch = useDispatch();
+  const { signinLoading, signinErrorMessage } = useSelector((state: RootState) => state.userState);
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinish = (values: UserSigninDto) => {
+    dispatch(signinUser(values));
   };
 
   return (
     <Form
-      {...layout}
-      name="basic"
-      size="large"
-      initialValues={{ remember: true }}
+      name="normal_login"
+      className="login-form"
+      initialValues={{
+        remember: true,
+      }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        label="E-posta"
         name="email"
-        required={false}
-        rules={[{ required: true, message: "Lütfen e-postanızı giriniz!" }]}
+        rules={[
+          {
+            required: true,
+            message: "Lütfen e-posta adresinizi giriniz!",
+          },
+        ]}
       >
-        <Input />
+        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="E-posta adresiniz" />
       </Form.Item>
-
       <Form.Item
-        label="Parola"
         name="password"
-        required={false}
-        rules={[{ required: true, message: "Lütfen parolanızı giriniz!" }]}
+        rules={[
+          {
+            required: true,
+            message: "Lütfen parolanızı giriniz!",
+          },
+        ]}
       >
-        <Input.Password />
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Parolanız"
+        />
+      </Form.Item>
+      {signinErrorMessage && (
+        <Form.Item>
+          <Alert message={signinErrorMessage} type="error" showIcon />
+        </Form.Item>
+      )}
+      <Form.Item>
+        <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Checkbox>Beni hatırla</Checkbox>
+        </Form.Item>
+
+        <a className="login-form-forgot" href="">
+          Parolamı unuttum
+        </a>
       </Form.Item>
 
-      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-        <Checkbox>Beni hatırla</Checkbox>
-      </Form.Item>
-
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+      <Form.Item>
+        <Button type="primary" htmlType="submit" className="login-form-button" loading={signinLoading}>
           GİRİŞ YAP
         </Button>
+        {/* Or <a href="">register now!</a> */}
       </Form.Item>
     </Form>
   );

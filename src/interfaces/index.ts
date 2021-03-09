@@ -59,7 +59,16 @@ export interface ITechicalService extends IMongoDefaults {
   warrantyDays?: number;
 }
 
-export interface TechnicalServiceSummary {
+export interface ITechnicalServiceSummary {
   _id: number;
   count: number;
+}
+
+export interface IUser extends IMongoDefaults {
+  name: string;
+  email: string;
+  companyName?: string;
+  phoneNumber?: string;
+  city?: string;
+  address?: string;
 }

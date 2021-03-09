@@ -30,7 +30,7 @@ const Summary = () => {
                   style={{ background: `url("./images/bg/wave.jpg")`, backgroundSize: "cover" }}
                 >
                   <h5 style={{ fontSize: 26 }}>
-                    {summary?.find((sum) => sum._id === status.value)?.count} adet
+                    {summary?.find((sum) => sum._id === status.value)?.count || 0} adet
                   </h5>
                   <h3 style={{ fontSize: 20, textAlign: "right", margin: 0 }}>{status.text}</h3>
                 </Card>

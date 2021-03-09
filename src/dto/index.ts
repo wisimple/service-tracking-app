@@ -30,3 +30,8 @@ export interface TechnicalServiceDto {
   totalCost?: number;
   paidAmount?: number;
 }
+
+export interface UserSigninDto {
+  email: string;
+  password: string;
+}

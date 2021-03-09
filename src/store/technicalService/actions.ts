@@ -2,6 +2,7 @@ import { TechnicalServiceDto } from "dto";
 import api from "utils/api";
 import {
   CREATE_TECHNICAL_SERVICE,
+  DELETE_TECHNICAL_SERVICE,
   FETCH_TECHNICAL_SERVICES,
   GET_TECHNICAL_SERVICE,
   GET_TECHNICAL_SERVICE_SUMMARY,
@@ -49,6 +50,15 @@ export const getTechnicalService = (id: string): TechnicalServiceThunkActionType
     const { data } = await api.get(`technical-services/${id}`);
     dispatch({ type: GET_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ loading: false }));
+  } catch (error) {}
+};
+
+export const deleteTechnicalService = (id: string): TechnicalServiceThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ dloading: true }));
+    const { data } = await api.delete(`technical-services/${id}`);
+    dispatch({ type: DELETE_TECHNICAL_SERVICE, payload: { service: data } });
+    dispatch(setLoading({ dloading: false }));
   } catch (error) {}
 };
 

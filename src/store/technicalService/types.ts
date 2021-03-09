@@ -1,11 +1,11 @@
-import { ITechicalService, TechnicalServiceSummary } from "interfaces";
+import { ITechicalService, ITechnicalServiceSummary } from "interfaces";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "store";
 
 export interface TechnicalServiceState {
   services: ITechicalService[];
   service?: ITechicalService;
-  summary?: TechnicalServiceSummary[];
+  summary?: ITechnicalServiceSummary[];
   loading?: boolean;
   cloading?: boolean;
   uloading?: boolean;
@@ -70,7 +70,7 @@ interface SetLoadingAction {
 interface GetTechnicalServiceSummary {
   type: typeof GET_TECHNICAL_SERVICE_SUMMARY;
   payload: {
-    summary: TechnicalServiceSummary[];
+    summary: ITechnicalServiceSummary[];
   };
 }
 

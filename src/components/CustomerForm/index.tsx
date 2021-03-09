@@ -1,5 +1,5 @@
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Popconfirm, Radio, message } from "antd";
+import { Button, Form, Input, Popconfirm, Radio, message, Row, Col } from "antd";
 import { CustomerDto } from "dto";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -88,22 +88,30 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
         <TextArea />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={cLoading}>
-          {data ? "GÜNCELLE" : "KAYDET"}
-        </Button>
+        {data ? (
+          <Row justify="space-between">
+            <Col>
+              <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={cLoading}>
+                GÜNCELLE
+              </Button>
+            </Col>
+            <Col>
+              <Popconfirm
+                title={`${data.name} adlı müşteriyi silmek istediğinizden emin misiniz?`}
+                onConfirm={handleDelete}
+              >
+                <Button type="primary" danger icon={<DeleteOutlined />} loading={dLoading}>
+                  SİL
+                </Button>
+              </Popconfirm>
+            </Col>
+          </Row>
+        ) : (
+          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={cLoading}>
+            KAYDET
+          </Button>
+        )}
       </Form.Item>
-      {data && (
-        <Form.Item>
-          <Popconfirm
-            title={`${data.name} adlı müşteriyi silmek istediğinizden emin misiniz?`}
-            onConfirm={handleDelete}
-          >
-            <Button type="primary" danger icon={<DeleteOutlined />} loading={dLoading}>
-              SİL
-            </Button>
-          </Popconfirm>
-        </Form.Item>
-      )}
     </Form>
   );
 };

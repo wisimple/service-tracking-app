@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Divider, Upload, Radio, Row, Col, InputNumber, message } from "antd";
-import { PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Divider,
+  Upload,
+  Radio,
+  Row,
+  Col,
+  InputNumber,
+  message,
+  Popconfirm,
+} from "antd";
+import { DeleteFilled, PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,7 +32,11 @@ import { getCustomerAvatarSrc, getDeviceImageUrl } from "helpers";
 import FaultTypeCrud from "components/FaultTypeCrud";
 import { fetchFaultTypes } from "store/faultType/actions";
 import { TechnicalServiceDto } from "dto";
-import { createTechnicalService, updateTechnicalService } from "store/technicalService/actions";
+import {
+  createTechnicalService,
+  deleteTechnicalService,
+  updateTechnicalService,
+} from "store/technicalService/actions";
 import { useHistory } from "react-router";
 import { IProduct, ITechicalService } from "interfaces";
 
@@ -35,9 +52,11 @@ const ServiceForm = ({ data }: Props) => {
   const { products, loading: productLoading } = useSelector((state: RootState) => state.productState);
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { faultTypes, loading: faultLoading } = useSelector((state: RootState) => state.faultTypeState);
-  const { cloading: serviceCreateLoading, uloading: servuceUpdateLoading } = useSelector(
-    (state: RootState) => state.servicesState
-  );
+  const {
+    cloading: serviceCreateLoading,
+    uloading: serviceUpdateLoading,
+    dloading: serviceDeleteLoading,
+  } = useSelector((state: RootState) => state.servicesState);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -90,6 +109,14 @@ const ServiceForm = ({ data }: Props) => {
     } else {
       await dispatch(createTechnicalService(values));
       message.success("Teknik Servis işlemi başarıyla oluşturuldu");
+    }
+    history.goBack();
+  };
+
+  const handleOnDelete = async () => {
+    if (data) {
+      await dispatch(deleteTechnicalService(data._id));
+      message.success("Teknik Servis işlemi başarıyla silindi");
     }
     history.goBack();
   };
@@ -259,7 +286,7 @@ const ServiceForm = ({ data }: Props) => {
         <Form.Item label="Cihaz Resimleri" name={["device", "image"]}>
           <Upload name="images[]" listType="picture" fileList={[]} multiple>
             <Button icon={<UploadOutlined />} size="middle">
-              Resimleri Seç
+              Resimleri Çek veya Seç
             </Button>
           </Upload>
         </Form.Item>
@@ -345,9 +372,30 @@ const ServiceForm = ({ data }: Props) => {
 
         <Form.Item wrapperCol={{ offset: 4 }}>
           {data ? (
-            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={servuceUpdateLoading}>
-              GÜNCELLE
-            </Button>
+            <Row justify="space-between">
+              <Col>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<SaveOutlined />}
+                  loading={serviceUpdateLoading}
+                >
+                  GÜNCELLE
+                </Button>
+              </Col>
+              <Col>
+                <Popconfirm
+                  title="Bu işlem geri alınamaz, silmek istediğinizden emin misiniz?"
+                  onConfirm={handleOnDelete}
+                  okText="Evet"
+                  cancelText="Vazgeç"
+                >
+                  <Button danger icon={<DeleteFilled />} loading={serviceDeleteLoading}>
+                    KAYDI SİL
+                  </Button>
+                </Popconfirm>
+              </Col>
+            </Row>
           ) : (
             <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={serviceCreateLoading}>
               KAYDET
