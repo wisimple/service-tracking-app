@@ -3,7 +3,7 @@ import { Button, Form, Input, Popconfirm, Radio, message, Row, Col } from "antd"
 import { CustomerDto } from "dto";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, useRouteMatch } from "react-router";
+import { useHistory } from "react-router";
 import { RootState } from "store";
 import { createCustomer, deleteCustomer, updateCustomer } from "store/customer/actions";
 import { Customer } from "store/customer/types";
@@ -19,7 +19,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   const { cLoading, dLoading } = useSelector((state: RootState) => state.customerState);
   const dispatch = useDispatch();
   const history = useHistory();
-  const { url } = useRouteMatch();
+  const [form] = Form.useForm();
 
   const [showGender, setshowGender] = useState(true);
 
@@ -30,6 +30,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
     } else {
       await dispatch(createCustomer(values));
       message.success("Yeni müşteri başarıyla oluşturuldu");
+      form.resetFields();
     }
     onSubmit();
   };
@@ -42,13 +43,15 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   };
 
   useEffect(() => {
+    console.log("hello");
     if (data) {
       setshowGender(data.type === "person");
+    } else {
     }
   }, []);
 
   return (
-    <Form layout="vertical" onFinish={handleSubmit} scrollToFirstError>
+    <Form form={form} layout="vertical" onFinish={handleSubmit} scrollToFirstError>
       <Form.Item label="Müşteri Tipi" name="type" initialValue={data?.type || "person"}>
         <Radio.Group
           onChange={({ target }) => {
@@ -108,7 +111,13 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
             </Col>
           </Row>
         ) : (
-          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={cLoading}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            icon={<SaveOutlined />}
+            disabled={cLoading}
+            loading={cLoading}
+          >
             KAYDET
           </Button>
         )}

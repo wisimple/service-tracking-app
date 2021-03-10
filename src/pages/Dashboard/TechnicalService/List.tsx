@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col, Popover, List, Tag } from "antd";
+import { Table, Button, Typography, Row, Col, Popover, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
@@ -101,7 +101,13 @@ export default function TechnicalService() {
         />
         <Column
           title="Arıza"
-          render={({ faultTypeId }: ITechicalService) => <div>{faultTypeId?.name}</div>}
+          render={({ faultTypeId }: ITechicalService) => (
+            <div>
+              {faultTypeId?.map((fT) => (
+                <Tag>{fT.name}</Tag>
+              ))}
+            </div>
+          )}
         />
         <Column
           title="Ücret"

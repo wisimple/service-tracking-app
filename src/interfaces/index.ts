@@ -52,7 +52,7 @@ export interface ITechicalService extends IMongoDefaults {
     imageFileNames?: string[];
     passOrPattern?: string;
   };
-  faultTypeId?: IFaultType;
+  faultTypeId?: IFaultType[];
   status: number;
   totalCost?: number;
   paidAmount?: number;

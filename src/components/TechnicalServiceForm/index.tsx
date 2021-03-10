@@ -86,7 +86,7 @@ const ServiceForm = ({ data }: Props) => {
           serialNumber: device?.serialNumber,
           passOrPattern: device?.passOrPattern,
         },
-        faultTypeId: faultTypeId?._id,
+        faultTypeId: faultTypeId?.map((fT) => fT._id),
       });
       if (device?.categoryId) {
         dispatch(fetchBrandsByCategory(device?.categoryId));
@@ -147,39 +147,45 @@ const ServiceForm = ({ data }: Props) => {
         wrapperCol={{ span: 14 }}
         onFinish={handleOnSubmit}
       >
-        <Form.Item
-          label="Müşteri"
-          name="customerId"
-          required
-          rules={[{ required: true, message: "Lütfen müşteri seçiniz" }]}
-        >
-          <Select
-            showSearch
-            loading={customersLoading}
-            filterOption={(input, option: any) => {
-              return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-            }}
-            dropdownRender={(menu) => (
-              <div>
-                {menu}
-                <Divider style={{ margin: "4px 0" }} />
-                <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-                  <Button type="link" size="middle" onClick={() => setisCustomerModalOpen(true)}>
-                    <PlusOutlined /> Yeni Müşteri Ekle
-                  </Button>
-                </div>
-              </div>
-            )}
-          >
-            {customers.map((item) => (
-              <Select.Option key={item._id} value={item._id} name={item.name}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Avatar size="small" src={getCustomerAvatarSrc(item)} style={{ marginRight: 8 }} />
-                  {item.name}
-                </div>
-              </Select.Option>
-            ))}
-          </Select>
+        <Form.Item label="Müşteri">
+          <Row gutter={8}>
+            <Col span={18}>
+              <Form.Item
+                name="customerId"
+                required
+                rules={[{ required: true, message: "Lütfen müşteri seçiniz" }]}
+              >
+                <Select
+                  showSearch
+                  loading={customersLoading}
+                  filterOption={(input, option: any) => {
+                    return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                  }}
+                >
+                  {customers.map((item) => (
+                    <Select.Option key={item._id} value={item._id} name={item.name}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Avatar size="small" src={getCustomerAvatarSrc(item)} style={{ marginRight: 8 }} />
+                        {item.name}
+                      </div>
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  size="middle"
+                  shape="round"
+                  onClick={() => setisCustomerModalOpen(true)}
+                >
+                  <PlusOutlined /> Yeni Müşteri Ekle
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form.Item>
         <Form.Item label="Talep" name="demand">
           <TextArea />
@@ -305,33 +311,42 @@ const ServiceForm = ({ data }: Props) => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="Arıza Tipi" name="faultTypeId">
-          <Select
-            showSearch
-            allowClear
-            placeholder="Arızayı Seçiniz"
-            loading={faultLoading}
-            filterOption={(input, option: any) => {
-              return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-            }}
-            dropdownRender={(menu) => (
-              <div>
-                {menu}
-                <Divider style={{ margin: "4px 0" }} />
-                <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-                  <Button type="link" size="middle" onClick={() => setisFaultTypeModalOpen(true)}>
-                    <PlusOutlined /> Yeni Arıza Tipi Ekle
-                  </Button>
-                </div>
-              </div>
-            )}
-          >
-            {faultTypes.map((item) => (
-              <Select.Option key={item._id} value={item._id}>
-                {item.name}
-              </Select.Option>
-            ))}
-          </Select>
+        <Form.Item label="Arıza Tipleri">
+          <Row gutter={8}>
+            <Col span={18}>
+              <Form.Item name="faultTypeId">
+                <Select
+                  mode="multiple"
+                  showSearch
+                  allowClear
+                  placeholder="Arızayı Seçiniz"
+                  loading={faultLoading}
+                  filterOption={(input, option: any) => {
+                    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                  }}
+                >
+                  {faultTypes.map((item) => (
+                    <Select.Option key={item._id} value={item._id}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col span={6}>
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  size="middle"
+                  shape="round"
+                  onClick={() => setisFaultTypeModalOpen(true)}
+                >
+                  <PlusOutlined /> Yeni Arıza Tipi Ekle
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form.Item>
 
         <Form.Item label="Yapılan İşlemler / Açıklama" name="desc">
@@ -397,7 +412,13 @@ const ServiceForm = ({ data }: Props) => {
               </Col>
             </Row>
           ) : (
-            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={serviceCreateLoading}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              icon={<SaveOutlined />}
+              disabled={serviceCreateLoading}
+              loading={serviceCreateLoading}
+            >
               KAYDET
             </Button>
           )}
