@@ -57,6 +57,7 @@ export interface ITechicalService extends IMongoDefaults {
   totalCost?: number;
   paidAmount?: number;
   warrantyDays?: number;
+  trackingId?: number;
 }
 
 export interface ITechnicalServiceSummary {

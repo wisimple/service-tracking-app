@@ -104,7 +104,7 @@ export default function TechnicalService() {
           render={({ faultTypeId }: ITechicalService) => (
             <div>
               {faultTypeId?.map((fT) => (
-                <Tag>{fT.name}</Tag>
+                <Tag key={fT._id}>{fT.name}</Tag>
               ))}
             </div>
           )}

@@ -10,6 +10,7 @@ export interface TechnicalServiceState {
   cloading?: boolean;
   uloading?: boolean;
   dloading?: boolean;
+  lastTrackingId: number;
 }
 
 export const FETCH_TECHNICAL_SERVICES = "FETCH_TECHNICAL_SERVICES";
@@ -21,6 +22,7 @@ export const GET_TECHNICAL_SERVICE = "GET_TECHNICAL_SERVICE";
 export const SET_TECHNICAL_SERVICE_LOADING = "SET_TECHNICAL_SERVICE_LOADING";
 
 export const GET_TECHNICAL_SERVICE_SUMMARY = "GET_TECHNICAL_SERVICE_SUMMARY";
+export const GET_TECHNICAL_LAST_TRACKING_ID = "GET_TECHNICAL_LAST_TRACKING_ID";
 
 interface FetchTechnicalServicesAction {
   type: typeof FETCH_TECHNICAL_SERVICES;
@@ -74,6 +76,13 @@ interface GetTechnicalServiceSummary {
   };
 }
 
+interface GetTechnicalServiceLastTrackingIdAction {
+  type: typeof GET_TECHNICAL_LAST_TRACKING_ID;
+  payload: {
+    id: number;
+  };
+}
+
 export type TechnicalServiceActionTypes =
   | FetchTechnicalServicesAction
   | CreateTechnicalServiceAction
@@ -81,7 +90,8 @@ export type TechnicalServiceActionTypes =
   | UpdateTechnicalServiceAction
   | DeleteTechnicalServiceAction
   | SetLoadingAction
-  | GetTechnicalServiceSummary;
+  | GetTechnicalServiceSummary
+  | GetTechnicalServiceLastTrackingIdAction;
 
 export type TechnicalServiceThunkActionTypes = ThunkAction<
   void,

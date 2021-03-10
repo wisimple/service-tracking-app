@@ -29,6 +29,7 @@ export interface TechnicalServiceDto {
   status: number;
   totalCost?: number;
   paidAmount?: number;
+  trackingId: number;
 }
 
 export interface UserSigninDto {

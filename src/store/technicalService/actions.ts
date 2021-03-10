@@ -4,6 +4,7 @@ import {
   CREATE_TECHNICAL_SERVICE,
   DELETE_TECHNICAL_SERVICE,
   FETCH_TECHNICAL_SERVICES,
+  GET_TECHNICAL_LAST_TRACKING_ID,
   GET_TECHNICAL_SERVICE,
   GET_TECHNICAL_SERVICE_SUMMARY,
   SET_TECHNICAL_SERVICE_LOADING,
@@ -68,6 +69,15 @@ export const getTechnicalServicesSummary = (): TechnicalServiceThunkActionTypes 
     const { data } = await api.get(`technical-services/summary`);
     dispatch({ type: GET_TECHNICAL_SERVICE_SUMMARY, payload: { summary: data } });
     dispatch(setLoading({ loading: false }));
+  } catch (error) {}
+};
+
+export const getTechnicalServicesLastTrackingId = (): TechnicalServiceThunkActionTypes => async (
+  dispatch
+) => {
+  try {
+    const { data } = await api.get(`technical-services/last-tracking-id`);
+    dispatch({ type: GET_TECHNICAL_LAST_TRACKING_ID, payload: { id: data } });
   } catch (error) {}
 };
 

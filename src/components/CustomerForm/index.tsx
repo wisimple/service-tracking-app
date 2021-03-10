@@ -95,7 +95,13 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
         {data ? (
           <Row justify="space-between">
             <Col>
-              <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={cLoading}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon={<SaveOutlined />}
+                disabled={cLoading}
+                loading={cLoading}
+              >
                 GÜNCELLE
               </Button>
             </Col>
@@ -104,7 +110,13 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
                 title={`${data.name} adlı müşteriyi silmek istediğinizden emin misiniz?`}
                 onConfirm={handleDelete}
               >
-                <Button type="primary" danger icon={<DeleteOutlined />} loading={dLoading}>
+                <Button
+                  type="primary"
+                  danger
+                  icon={<DeleteOutlined />}
+                  disabled={dLoading}
+                  loading={dLoading}
+                >
                   SİL
                 </Button>
               </Popconfirm>

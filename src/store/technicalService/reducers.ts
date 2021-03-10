@@ -8,10 +8,12 @@ import {
   GET_TECHNICAL_SERVICE,
   SET_TECHNICAL_SERVICE_LOADING,
   GET_TECHNICAL_SERVICE_SUMMARY,
+  GET_TECHNICAL_LAST_TRACKING_ID,
 } from "./types";
 
 const initialState: TechnicalServiceState = {
   services: [],
+  lastTrackingId: 0,
 };
 
 export default function technicalServiceReducer(
@@ -53,6 +55,9 @@ export default function technicalServiceReducer(
       const { summary } = action.payload;
       return { ...state, summary };
     }
+
+    case GET_TECHNICAL_LAST_TRACKING_ID:
+      return { ...state, lastTrackingId: action.payload.id };
 
     default:
       return state;

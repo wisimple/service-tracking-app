@@ -12,6 +12,7 @@ import {
   InputNumber,
   message,
   Popconfirm,
+  Typography,
 } from "antd";
 import { DeleteFilled, PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
@@ -35,12 +36,14 @@ import { TechnicalServiceDto } from "dto";
 import {
   createTechnicalService,
   deleteTechnicalService,
+  getTechnicalServicesLastTrackingId,
   updateTechnicalService,
 } from "store/technicalService/actions";
 import { useHistory } from "react-router";
 import { IProduct, ITechicalService } from "interfaces";
 
 const { TextArea } = Input;
+const { Title } = Typography;
 
 interface Props {
   data?: ITechicalService;
@@ -56,6 +59,7 @@ const ServiceForm = ({ data }: Props) => {
     cloading: serviceCreateLoading,
     uloading: serviceUpdateLoading,
     dloading: serviceDeleteLoading,
+    lastTrackingId,
   } = useSelector((state: RootState) => state.servicesState);
 
   const dispatch = useDispatch();
@@ -74,8 +78,10 @@ const ServiceForm = ({ data }: Props) => {
 
   useEffect(() => {
     if (data) {
-      console.log("data has changed");
+      console.log("data var");
+
       const { device, customerId, faultTypeId } = data;
+      form.resetFields();
       form.setFieldsValue({
         ...data,
         customerId: customerId?._id,
@@ -99,8 +105,16 @@ const ServiceForm = ({ data }: Props) => {
       } else {
         setproductImageFileName(undefined);
       }
+    } else {
+      dispatch(getTechnicalServicesLastTrackingId());
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!data) {
+      form.setFieldsValue({ trackingId: lastTrackingId + 1 });
+    }
+  }, [lastTrackingId]);
 
   const handleOnSubmit = async (values: TechnicalServiceDto) => {
     if (data) {
@@ -147,6 +161,9 @@ const ServiceForm = ({ data }: Props) => {
         wrapperCol={{ span: 14 }}
         onFinish={handleOnSubmit}
       >
+        <Form.Item label="Teknik Servis Takip No" name="trackingId">
+          <Input disabled />
+        </Form.Item>
         <Form.Item label="Müşteri">
           <Row gutter={8}>
             <Col span={18}>
@@ -394,6 +411,7 @@ const ServiceForm = ({ data }: Props) => {
                   htmlType="submit"
                   icon={<SaveOutlined />}
                   loading={serviceUpdateLoading}
+                  disabled={serviceUpdateLoading}
                 >
                   GÜNCELLE
                 </Button>
