@@ -45,6 +45,7 @@ export default function TechnicalService() {
         pagination={{ pageSize: 20 }}
         style={{ overflowY: "scroll" }}
       >
+        <Column title="Takip No" dataIndex="trackingId" />
         <Column
           title="Müşteri"
           render={({ customerId }: ITechicalService) => (
@@ -65,6 +66,11 @@ export default function TechnicalService() {
                       </li>
                     )}
                   </ul>
+                  <Link to={`/dashboard/customers/${customerId._id}`}>
+                    <Button type="primary" size="small">
+                      Detaylar
+                    </Button>
+                  </Link>
                 </div>
               }
             >
@@ -94,9 +100,14 @@ export default function TechnicalService() {
         <Column
           title="Durum"
           dataIndex="status"
-          render={(status: number) => {
+          render={(status: number, service: ITechicalService) => {
             const { text, color } = getTechnicalServiceStatusType(status);
-            return <Tag color={color}>{text}</Tag>;
+            return (
+              <div>
+                <Tag color={color}>{text}</Tag>
+                {service?.deliveredAt && <small>{new Date(service.deliveredAt).toLocaleDateString()}</small>}
+              </div>
+            );
           }}
         />
         <Column
@@ -128,14 +139,13 @@ export default function TechnicalService() {
           }}
         />
         <Column
-          title="Tarih"
+          title="Giriş Tarihi"
           dataIndex="cAt"
           render={(date: string) => {
             return new Date(date).toLocaleDateString();
           }}
         />
         <Column
-          title="İşlem"
           render={(item: ITechicalService) => {
             return (
               <Button type="dashed">
