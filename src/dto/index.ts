@@ -24,6 +24,7 @@ export interface TechnicalServiceDto {
     productId?: string;
     serialNumber?: string;
     imageFileNames?: string[];
+    customName?: string;
   };
   faultTypeId?: string;
   status: number;

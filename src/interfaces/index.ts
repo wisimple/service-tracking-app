@@ -51,6 +51,7 @@ export interface ITechicalService extends IMongoDefaults {
     serialNumber?: string;
     imageFileNames?: string[];
     passOrPattern?: string;
+    customName?: string;
   };
   faultTypeId?: IFaultType[];
   status: number;

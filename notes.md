@@ -17,7 +17,7 @@
 
 ## Urunler
 
--general mobile cihazlari eklenecek
++general mobile cihazlari eklenecek
 
 ## Genel
 

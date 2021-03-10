@@ -83,19 +83,25 @@ export default function TechnicalService() {
         />
         <Column
           title="Cihaz"
-          render={({ device }: ITechicalService) => (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {device?.productId?.imgFile && (
-                <img
-                  src={getDeviceImageUrl(device.productId.imgFile)}
-                  height={35}
-                  width="auto"
-                  style={{ marginRight: 8 }}
-                />
-              )}
-              {device?.brandId?.name} {device?.productId?.name}
-            </div>
-          )}
+          render={({ device }: ITechicalService) => {
+            if (device?.customName) {
+              return device.customName;
+            } else {
+              return (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  {device?.productId?.imgFile && (
+                    <img
+                      src={getDeviceImageUrl(device.productId.imgFile)}
+                      height={35}
+                      width="auto"
+                      style={{ marginRight: 8 }}
+                    />
+                  )}
+                  {device?.brandId?.name} {device?.productId?.name}
+                </div>
+              );
+            }
+          }}
         />
         <Column
           title="Durum"

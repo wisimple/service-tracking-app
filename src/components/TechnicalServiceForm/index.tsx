@@ -66,6 +66,7 @@ const ServiceForm = ({ data }: Props) => {
   const [productImageFileName, setproductImageFileName] = useState<string | undefined>();
   const [isCustomerModalOpen, setisCustomerModalOpen] = useState(false);
   const [isFaultTypeModalOpen, setisFaultTypeModalOpen] = useState(false);
+  const [showDeviceName, setshowDeviceName] = useState(false);
 
   useEffect(() => {
     dispatch(fetchFaultTypes());
@@ -88,6 +89,7 @@ const ServiceForm = ({ data }: Props) => {
           productId: device?.productId?._id,
           serialNumber: device?.serialNumber,
           passOrPattern: device?.passOrPattern,
+          customName: device?.customName,
         },
         faultTypeId: faultTypeId?.map((fT) => fT._id),
       });
@@ -101,6 +103,11 @@ const ServiceForm = ({ data }: Props) => {
         setproductImageFileName(device.productId.imgFile);
       } else {
         setproductImageFileName(undefined);
+      }
+      if (device?.customName) {
+        setshowDeviceName(true);
+      } else {
+        setshowDeviceName(false);
       }
     } else {
       dispatch(getTechnicalServicesLastTrackingId());
@@ -130,6 +137,17 @@ const ServiceForm = ({ data }: Props) => {
       message.success("Teknik Servis işlemi başarıyla silindi");
     }
     history.goBack();
+  };
+
+  const toggleShowDeviceName = () => {
+    if (showDeviceName) {
+      form.setFieldsValue({ device: { customName: undefined } });
+    } else {
+      form.setFieldsValue({ device: { categoryId: undefined, brandId: undefined, productId: undefined } });
+      dispatch(resetBrands());
+      dispatch(resetProducts());
+    }
+    setshowDeviceName((show) => !show);
   };
 
   return (
@@ -219,83 +237,95 @@ const ServiceForm = ({ data }: Props) => {
 
         <Form.Item label="Cihaz Seçiniz">
           <Input.Group compact>
-            <Form.Item name={["device", "categoryId"]} noStyle>
-              <Select
-                style={{ width: "40%" }}
-                placeholder="Cihaz Tipi"
-                allowClear
-                onSelect={(value: string) => {
-                  setproductImageFileName(undefined);
-                  form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
-                  dispatch(fetchBrandsByCategory(value));
-                }}
-                onClear={() => {
-                  setproductImageFileName(undefined);
-                  form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
-                  dispatch(resetBrands());
-                  dispatch(resetProducts());
-                }}
-                loading={loading}
-              >
-                {categories.map((item) => (
-                  <Select.Option key={item._id} value={item._id}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name={["device", "brandId"]} noStyle>
-              <Select
-                showSearch
-                style={{ width: "30%" }}
-                placeholder="Marka"
-                loading={brandLoading}
-                allowClear
-                onSelect={(value: string) => {
-                  form.setFieldsValue({ device: { productId: undefined } });
-                  setproductImageFileName(undefined);
-                  dispatch(fetchProductsByBrand(value));
-                }}
-                onClear={() => {
-                  setproductImageFileName(undefined);
-                  form.setFieldsValue({ device: { productId: undefined } });
-                  dispatch(resetProducts());
-                }}
-                filterOption={(input, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                {brands.map((item) => (
-                  <Select.Option key={item._id} value={item._id}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name={["device", "productId"]} noStyle>
-              <Select
-                showSearch
-                allowClear
-                style={{ width: "30%" }}
-                placeholder="Model"
-                loading={productLoading}
-                filterOption={(input, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                onChange={(value: string) =>
-                  setproductImageFileName(products.find((p) => p._id === value)?.imgFile || undefined)
-                }
-              >
-                {products.map((item) => (
-                  <Select.Option key={item._id} value={item._id}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
+            {showDeviceName ? (
+              <Form.Item name={["device", "customName"]}>
+                <Input placeholder="Cihaz İsmi" />
+              </Form.Item>
+            ) : (
+              <>
+                <Form.Item name={["device", "categoryId"]} noStyle>
+                  <Select
+                    style={{ width: "40%" }}
+                    placeholder="Cihaz Tipi"
+                    allowClear
+                    onSelect={(value: string) => {
+                      setproductImageFileName(undefined);
+                      form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
+                      dispatch(fetchBrandsByCategory(value));
+                    }}
+                    onClear={() => {
+                      setproductImageFileName(undefined);
+                      form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
+                      dispatch(resetBrands());
+                      dispatch(resetProducts());
+                    }}
+                    loading={loading}
+                  >
+                    {categories.map((item) => (
+                      <Select.Option key={item._id} value={item._id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name={["device", "brandId"]} noStyle>
+                  <Select
+                    showSearch
+                    style={{ width: "30%" }}
+                    placeholder="Marka"
+                    loading={brandLoading}
+                    allowClear
+                    onSelect={(value: string) => {
+                      form.setFieldsValue({ device: { productId: undefined } });
+                      setproductImageFileName(undefined);
+                      dispatch(fetchProductsByBrand(value));
+                    }}
+                    onClear={() => {
+                      setproductImageFileName(undefined);
+                      form.setFieldsValue({ device: { productId: undefined } });
+                      dispatch(resetProducts());
+                    }}
+                    filterOption={(input, option: any) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {brands.map((item) => (
+                      <Select.Option key={item._id} value={item._id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name={["device", "productId"]} noStyle>
+                  <Select
+                    showSearch
+                    allowClear
+                    style={{ width: "30%" }}
+                    placeholder="Model"
+                    loading={productLoading}
+                    filterOption={(input, option: any) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    onChange={(value: string) =>
+                      setproductImageFileName(products.find((p) => p._id === value)?.imgFile || undefined)
+                    }
+                  >
+                    {products.map((item) => (
+                      <Select.Option key={item._id} value={item._id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </>
+            )}
+            <Form.Item noStyle>
+              <Button type="link" onClick={toggleShowDeviceName}>
+                {showDeviceName ? "Kategoriden Seç" : "Farkli bir cihaz gir"}
+              </Button>
             </Form.Item>
           </Input.Group>
         </Form.Item>
-
         <Form.Item label="Imei / Seri No" name={["device", "serialNumber"]}>
           <Input />
         </Form.Item>
