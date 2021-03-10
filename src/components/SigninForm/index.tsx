@@ -17,6 +17,7 @@ const SigninForm = () => {
     <Form
       name="normal_login"
       className="login-form"
+      size="large"
       initialValues={{
         remember: true,
       }}
@@ -31,7 +32,11 @@ const SigninForm = () => {
           },
         ]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="E-posta adresiniz" />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          type="email"
+          placeholder="E-posta adresiniz"
+        />
       </Form.Item>
       <Form.Item
         name="password"

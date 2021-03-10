@@ -12,7 +12,6 @@ import {
   InputNumber,
   message,
   Popconfirm,
-  Typography,
 } from "antd";
 import { DeleteFilled, PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
@@ -24,7 +23,6 @@ import { RootState } from "store";
 import { fetchBrandsByCategory, resetBrands } from "store/brand/actions";
 import { fetchProductCategories } from "store/productCategory/actions";
 import { fetchProductsByBrand, resetProducts } from "store/product/actions";
-import { Product } from "store/product/types";
 import { fetchCustomers } from "store/customer/actions";
 import Modal from "antd/lib/modal/Modal";
 import CustomerForm from "components/CustomerForm";
@@ -40,10 +38,9 @@ import {
   updateTechnicalService,
 } from "store/technicalService/actions";
 import { useHistory } from "react-router";
-import { IProduct, ITechicalService } from "interfaces";
+import { ITechicalService } from "interfaces";
 
 const { TextArea } = Input;
-const { Title } = Typography;
 
 interface Props {
   data?: ITechicalService;
@@ -157,8 +154,8 @@ const ServiceForm = ({ data }: Props) => {
         form={form}
         scrollToFirstError
         size="large"
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
+        labelCol={{ md: 6, xl: 4 }}
+        wrapperCol={{ md: 18, xl: 16 }}
         onFinish={handleOnSubmit}
       >
         <Form.Item label="Teknik Servis Takip No" name="trackingId">
@@ -166,7 +163,7 @@ const ServiceForm = ({ data }: Props) => {
         </Form.Item>
         <Form.Item label="Müşteri">
           <Row gutter={8}>
-            <Col span={18}>
+            <Col xs={24} md={18}>
               <Form.Item
                 name="customerId"
                 required
@@ -190,7 +187,7 @@ const ServiceForm = ({ data }: Props) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} md={6}>
               <Form.Item>
                 <Button
                   type="dashed"
@@ -330,7 +327,7 @@ const ServiceForm = ({ data }: Props) => {
 
         <Form.Item label="Arıza Tipleri">
           <Row gutter={8}>
-            <Col span={18}>
+            <Col xs={24} md={16}>
               <Form.Item name="faultTypeId">
                 <Select
                   mode="multiple"
@@ -351,7 +348,7 @@ const ServiceForm = ({ data }: Props) => {
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col xs={24} md={8}>
               <Form.Item>
                 <Button
                   type="dashed"
@@ -384,7 +381,7 @@ const ServiceForm = ({ data }: Props) => {
           Ücret Bilgileri
         </Divider>
 
-        <Form.Item wrapperCol={{ offset: 4 }} style={{ marginBottom: 0 }}>
+        <Form.Item wrapperCol={{ md: { offset: 4 } }} style={{ marginBottom: 0 }}>
           <Form.Item
             label="Toplam Ücret"
             name="totalCost"
@@ -402,7 +399,7 @@ const ServiceForm = ({ data }: Props) => {
           </Form.Item>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 4 }}>
+        <Form.Item wrapperCol={{ md: { offset: 4 } }}>
           {data ? (
             <Row justify="space-between">
               <Col>

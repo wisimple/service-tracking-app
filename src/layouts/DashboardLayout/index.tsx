@@ -1,5 +1,5 @@
 import { Breadcrumb, Layout, Menu } from "antd";
-import React, { useLayoutEffect, useState } from "react";
+import React from "react";
 import {
   DesktopOutlined,
   ToolOutlined,
@@ -52,33 +52,25 @@ interface Props {
 
 const DashboardLayout = ({ children }: Props) => {
   const { url } = useRouteMatch();
+  const { pathname } = useLocation();
+
   const dispatch = useDispatch();
 
   return (
     <Layout>
-      <Sider
-        collapsedWidth="0"
-        breakpoint="lg"
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-        }}
-        theme="light"
-      >
-        <div className={styles.logo}>Logo</div>
-        <Menu defaultSelectedKeys={["/"]} mode="inline">
-          <Menu.Item key="/" icon={<DesktopOutlined />}>
+      <Sider collapsedWidth="0" breakpoint="lg">
+        <div className={styles.logo}>Logo </div>
+        <Menu theme="dark" defaultSelectedKeys={["/"]} mode="inline" selectedKeys={[pathname]}>
+          <Menu.Item key={`${url}`} icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
-          <Menu.Item key="/technical-services" icon={<ToolOutlined />}>
+          <Menu.Item key={`${url}/technical-services`} icon={<ToolOutlined />}>
             <Link to={`${url}/technical-services`}>Teknik Servis</Link>
           </Menu.Item>
-          <Menu.Item key="/customers" icon={<TeamOutlined />}>
+          <Menu.Item key={`${url}/customers`} icon={<TeamOutlined />}>
             <Link to={`${url}/customers`}>Müşterilerim</Link>
           </Menu.Item>
-          <Menu.Item key="/settings" icon={<SettingOutlined />}>
+          <Menu.Item key={`${url}/settings`} icon={<SettingOutlined />}>
             <Link to={`${url}/settings`}>Ayarlar</Link>
           </Menu.Item>
           <Menu.Item key="signout" icon={<LogoutOutlined />} onClick={() => dispatch(signoutUser())}>
@@ -86,7 +78,7 @@ const DashboardLayout = ({ children }: Props) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout style={{ minHeight: "100vh", marginLeft: 200 }}>
+      <Layout style={{ minHeight: "100vh" }}>
         <Header></Header>
         <Content style={{ padding: 16 }}>
           <BreadCrumbComponent />

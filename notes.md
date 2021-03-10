@@ -4,7 +4,7 @@
 +telefon kategorisi en basa gelsin
 +yeni musteri ekleme butonu inpun sagina gelicek, musteri
 +fault type should be multiple
--teknik servis uniuq no
++teknik servis uniuq no
 -teknik servise pin deseni girisi
 -manuel cihaz ekleme
 -teknik servis teslim eden ve alan kisi
@@ -18,3 +18,8 @@
 ## Urunler
 
 -general mobile cihazlari eklenecek
+
+## Genel
+
++mobile responsive
++sider active menu will be selected

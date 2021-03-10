@@ -18,11 +18,11 @@ const Summary = () => {
   return (
     <div>
       <Title level={3}>Teknik Servis Durumu</Title>
-      <Row gutter={{ sm: 16 }}>
+      <Row gutter={[16, 16]}>
         {[1, 3, 5].map((i) => {
           const status = getTechnicalServiceStatusType(i);
           return (
-            <Col key={i} span={8}>
+            <Col key={i} xs={24} md={12} lg={8}>
               <Link to={`${url}/technical-services`}>
                 <Card
                   loading={loading}
