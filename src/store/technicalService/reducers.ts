@@ -21,8 +21,10 @@ export default function technicalServiceReducer(
   action: TechnicalServiceActionTypes
 ): TechnicalServiceState {
   switch (action.type) {
-    case FETCH_TECHNICAL_SERVICES:
-      return { ...state, services: action.payload.services };
+    case FETCH_TECHNICAL_SERVICES: {
+      const { services, accountSummary } = action.payload;
+      return { ...state, services, accountSummary };
+    }
 
     // case CREATE_TECHNICAL_SERVICE:
     //   return { ...state, services: [action.payload.service, ...state.services] };

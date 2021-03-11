@@ -21,7 +21,10 @@ export const fetchTechnicalServices = (
     const { data } = await api.get("technical-services", {
       params: { ...queryParams },
     });
-    dispatch({ type: FETCH_TECHNICAL_SERVICES, payload: { services: data } });
+    dispatch({
+      type: FETCH_TECHNICAL_SERVICES,
+      payload: { services: data.result, accountSummary: data.summary },
+    });
     dispatch(setLoading({ loading: false }));
   } catch (error) {}
 };

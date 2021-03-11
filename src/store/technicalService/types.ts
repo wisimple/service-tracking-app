@@ -11,6 +11,7 @@ export interface TechnicalServiceState {
   uloading?: boolean;
   dloading?: boolean;
   lastTrackingId: number;
+  accountSummary?: { totalCost: number; paidAmount: number };
 }
 
 export const FETCH_TECHNICAL_SERVICES = "FETCH_TECHNICAL_SERVICES";
@@ -28,6 +29,7 @@ interface FetchTechnicalServicesAction {
   type: typeof FETCH_TECHNICAL_SERVICES;
   payload: {
     services: ITechicalService[];
+    accountSummary?: { totalCost: number; paidAmount: number };
   };
 }
 

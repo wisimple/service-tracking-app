@@ -27,7 +27,7 @@ const Summary = () => {
                 <Card
                   loading={loading}
                   hoverable
-                  style={{ background: `url("./images/bg/wave.jpg")`, backgroundSize: "cover" }}
+                  style={{ background: `url("/images/bg/wave.jpg")`, backgroundSize: "cover" }}
                 >
                   <h5 style={{ fontSize: 26 }}>
                     {summary?.find((sum) => sum._id === status.value)?.count || 0} adet

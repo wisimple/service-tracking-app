@@ -8,3 +8,9 @@
 .font-money {
   font-family: "Roboto Mono", monospace;
 }
+
+.hide-on-print {
+  @media print {
+    display: none;
+  }
+}

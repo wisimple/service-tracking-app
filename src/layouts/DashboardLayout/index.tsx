@@ -38,7 +38,7 @@ const BreadCrumbComponent = () => {
   const items = pathname.replace(/\/dashboard/g, "").split("/");
 
   return (
-    <Breadcrumb style={{ paddingBottom: 16 }}>
+    <Breadcrumb style={{ paddingBottom: 16 }} className="hide-on-print">
       {items.map((i) => (
         <Breadcrumb.Item key={i}> {getPathName(i)}</Breadcrumb.Item>
       ))}
@@ -58,7 +58,7 @@ const DashboardLayout = ({ children }: Props) => {
 
   return (
     <Layout>
-      <Sider collapsedWidth="0" breakpoint="lg">
+      <Sider collapsedWidth="0" breakpoint="lg" className="hide-on-print">
         <div className={styles.logo}>Logo </div>
         <Menu theme="dark" defaultSelectedKeys={["/"]} mode="inline" selectedKeys={[pathname]}>
           <Menu.Item key={`${url}`} icon={<DesktopOutlined />}>
@@ -79,7 +79,7 @@ const DashboardLayout = ({ children }: Props) => {
         </Menu>
       </Sider>
       <Layout style={{ minHeight: "100vh" }}>
-        <Header></Header>
+        <Header className="hide-on-print"></Header>
         <Content style={{ padding: 16 }}>
           <BreadCrumbComponent />
           {children}

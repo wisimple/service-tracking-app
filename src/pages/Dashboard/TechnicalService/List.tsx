@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col, Popover, Tag, Select, DatePicker } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Table, Button, Typography, Row, Col, Popover, Tag, Select, DatePicker, Descriptions } from "antd";
+import { PlusOutlined, PrinterOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,7 @@ const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 export default function TechnicalService() {
-  const { services, loading } = useSelector((state: RootState) => state.servicesState);
+  const { services, accountSummary, loading } = useSelector((state: RootState) => state.servicesState);
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
@@ -47,14 +47,15 @@ export default function TechnicalService() {
           </Title>
         </Col>
         <Col>
-          <Link to={`${url}/create`}>
+          <Link to={`${url}/create`} className="hide-on-print">
             <Button type="primary" icon={<PlusOutlined />}>
               Yeni İşlem Ekle
             </Button>
           </Link>
         </Col>
       </Row>
-      <Row style={{ marginBottom: 20 }} gutter={[8, 8]}>
+
+      <Row style={{ marginBottom: 10 }} gutter={[8, 8]}>
         <Col xs={12} md={6}>
           <Select
             style={{ width: "100%" }}
@@ -95,7 +96,7 @@ export default function TechnicalService() {
             ))}
           </Select>
         </Col>
-        <Col xs={24} md={12} lg={8}>
+        <Col xs={16} md={8} lg={8}>
           <RangePicker
             size="large"
             style={{ width: "100%" }}
@@ -110,8 +111,27 @@ export default function TechnicalService() {
             }}
           />
         </Col>
+        <Col xs={8} md={4} lg={4}>
+          <Button block size="large" icon={<PrinterOutlined />} onClick={() => window.print()}>
+            Yazdır
+          </Button>
+        </Col>
       </Row>
+      {accountSummary && (
+        <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+          <Descriptions.Item label="Toplam Tutar">
+            <Money amount={accountSummary?.totalCost} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Alınan Tutar">
+            <Money amount={accountSummary?.paidAmount} color="green" />
+          </Descriptions.Item>
+          <Descriptions.Item label="Kalan Tutar">
+            <Money amount={accountSummary?.totalCost - accountSummary?.paidAmount} color="red" />
+          </Descriptions.Item>
+        </Descriptions>
+      )}
       <Table
+        id="table"
         dataSource={services}
         loading={loading}
         rowKey="_id"
@@ -120,6 +140,7 @@ export default function TechnicalService() {
       >
         <Column title="Takip No" dataIndex="trackingId" />
         <Column
+          className="hide-on-print"
           title="Müşteri"
           render={({ customerId }: ITechicalService) => (
             <Popover
@@ -225,6 +246,7 @@ export default function TechnicalService() {
           }}
         />
         <Column
+          className="hide-on-print"
           render={(item: ITechicalService) => {
             return (
               <Button type="dashed">
