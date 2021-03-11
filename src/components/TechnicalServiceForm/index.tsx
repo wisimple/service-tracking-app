@@ -12,8 +12,15 @@ import {
   InputNumber,
   message,
   Popconfirm,
+  Popover,
 } from "antd";
-import { DeleteFilled, PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  BorderInnerOutlined,
+  DeleteFilled,
+  PlusOutlined,
+  SaveOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -27,7 +34,7 @@ import { fetchCustomers } from "store/customer/actions";
 import Modal from "antd/lib/modal/Modal";
 import CustomerForm from "components/CustomerForm";
 import Avatar from "antd/lib/avatar/avatar";
-import { getCustomerAvatarSrc, getDeviceImageUrl } from "helpers";
+import { getCustomerAvatarSrc, getDeviceImageUrl, isPatternLockString } from "helpers";
 import FaultTypeCrud from "components/FaultTypeCrud";
 import { fetchFaultTypes } from "store/faultType/actions";
 import { TechnicalServiceDto } from "dto";
@@ -39,6 +46,7 @@ import {
 } from "store/technicalService/actions";
 import { useHistory } from "react-router";
 import { ITechicalService } from "interfaces";
+import PasswordPattern from "components/PasswordPattern";
 
 const { TextArea } = Input;
 
@@ -67,6 +75,7 @@ const ServiceForm = ({ data }: Props) => {
   const [isCustomerModalOpen, setisCustomerModalOpen] = useState(false);
   const [isFaultTypeModalOpen, setisFaultTypeModalOpen] = useState(false);
   const [showDeviceName, setshowDeviceName] = useState(false);
+  const [isPatternPopOpen, setisPatternPopOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchFaultTypes());
@@ -146,6 +155,7 @@ const ServiceForm = ({ data }: Props) => {
       form.setFieldsValue({ device: { categoryId: undefined, brandId: undefined, productId: undefined } });
       dispatch(resetBrands());
       dispatch(resetProducts());
+      setproductImageFileName(undefined);
     }
     setshowDeviceName((show) => !show);
   };
@@ -330,12 +340,50 @@ const ServiceForm = ({ data }: Props) => {
           <Input />
         </Form.Item>
         <Form.Item label="Cihaz Parolası" name={["device", "passOrPattern"]}>
-          <Input />
+          <Input
+            addonAfter={
+              <Popover
+                title="Desen Oluştur"
+                trigger="click"
+                visible={isPatternPopOpen}
+                onVisibleChange={(show) => setisPatternPopOpen(show)}
+                content={
+                  <>
+                    {isPatternPopOpen && (
+                      <>
+                        <PasswordPattern
+                          initialPattern={
+                            data?.device?.passOrPattern && isPatternLockString(data.device.passOrPattern)
+                              ? data.device.passOrPattern
+                              : undefined
+                          }
+                          onChange={(pattern) =>
+                            form.setFieldsValue({ device: { passOrPattern: pattern.toString() } })
+                          }
+                        />
+                        <Row justify="end" style={{ marginTop: 10 }}>
+                          <Col>
+                            <Button size="small" onClick={() => setisPatternPopOpen(false)}>
+                              Tamam
+                            </Button>
+                          </Col>
+                        </Row>{" "}
+                      </>
+                    )}
+                  </>
+                }
+              >
+                <Button type="link" size="middle" icon={<BorderInnerOutlined />}>
+                  Desen gir
+                </Button>
+              </Popover>
+            }
+          />
         </Form.Item>
 
         <Form.Item label="Cihaz Resimleri" name={["device", "image"]}>
           <Upload name="images[]" listType="picture" fileList={[]} multiple>
-            <Button icon={<UploadOutlined />} size="middle">
+            <Button icon={<UploadOutlined />} size="middle" disabled>
               Resimleri Çek veya Seç
             </Button>
           </Upload>

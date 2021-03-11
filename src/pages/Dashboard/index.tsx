@@ -1,5 +1,4 @@
 import DashboardLayout from "layouts/DashboardLayout";
-import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 import Summary from "pages/Dashboard/Summary";

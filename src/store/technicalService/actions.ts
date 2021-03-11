@@ -1,4 +1,4 @@
-import { TechnicalServiceDto } from "dto";
+import { QueryTechnicalServiceDto, TechnicalServiceDto } from "dto";
 import api from "utils/api";
 import {
   CREATE_TECHNICAL_SERVICE,
@@ -13,10 +13,14 @@ import {
   UPDATE_TECHNICAL_SERVICE,
 } from "./types";
 
-export const fetchTechnicalServices = (): TechnicalServiceThunkActionTypes => async (dispatch) => {
+export const fetchTechnicalServices = (
+  queryParams?: QueryTechnicalServiceDto
+): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get("technical-services");
+    const { data } = await api.get("technical-services", {
+      params: { ...queryParams },
+    });
     dispatch({ type: FETCH_TECHNICAL_SERVICES, payload: { services: data } });
     dispatch(setLoading({ loading: false }));
   } catch (error) {}

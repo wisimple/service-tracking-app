@@ -1,7 +1,6 @@
 import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
-import { Button, Form, Input, List, Table, Popconfirm } from "antd";
-import { FaultTypeDto } from "dto";
-import React, { useEffect, useState } from "react";
+import { Button, Form, Input, List, Popconfirm } from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 

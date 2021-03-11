@@ -1,27 +1,43 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col, Popover, Tag } from "antd";
+import { Table, Button, Typography, Row, Col, Popover, Tag, Select, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTechnicalServices } from "store/technicalService/actions";
+
 import { ITechicalService } from "interfaces";
 import { getCustomerAvatarSrc, getDeviceImageUrl, getTechnicalServiceStatusType } from "helpers";
+
 import Avatar from "antd/lib/avatar/avatar";
 import Money from "components/Money";
+import { fetchCustomers } from "store/customer/actions";
+
+import { technicServiceStatusTypes } from "constants/index";
+import { QueryTechnicalServiceDto } from "dto";
 
 const { Column } = Table;
 const { Title } = Typography;
+const { RangePicker } = DatePicker;
 
 export default function TechnicalService() {
   const { services, loading } = useSelector((state: RootState) => state.servicesState);
+  const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
+
+  const [query, setquery] = useState<QueryTechnicalServiceDto>({});
+
   useEffect(() => {
-    dispatch(fetchTechnicalServices());
+    dispatch(fetchTechnicalServices(query));
+  }, [query]);
+
+  useEffect(() => {
+    dispatch(fetchCustomers());
   }, []);
+
   return (
     <div>
       <Row justify="space-between" style={{ paddingBottom: 16 }}>
@@ -36,6 +52,63 @@ export default function TechnicalService() {
               Yeni İşlem Ekle
             </Button>
           </Link>
+        </Col>
+      </Row>
+      <Row style={{ marginBottom: 20 }} gutter={[8, 8]}>
+        <Col xs={12} md={6}>
+          <Select
+            style={{ width: "100%" }}
+            showSearch
+            size="large"
+            allowClear
+            loading={customersLoading}
+            placeholder="Müşteri Seçiniz"
+            filterOption={(input, option: any) => {
+              return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+            }}
+            onClear={() => setquery((prev) => ({ ...prev, customerId: undefined }))}
+            onChange={(customerId: string) => setquery((prev) => ({ ...prev, customerId }))}
+          >
+            {customers.map((item) => (
+              <Select.Option key={item._id} value={item._id} name={item.name}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar size="small" src={getCustomerAvatarSrc(item)} style={{ marginRight: 8 }} />
+                  {item.name}
+                </div>
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col xs={12} md={6}>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Servis Durumu"
+            allowClear
+            size="large"
+            onClear={() => setquery((prev) => ({ ...prev, status: undefined }))}
+            onChange={(status: number) => setquery((prev) => ({ ...prev, status }))}
+          >
+            {technicServiceStatusTypes.map((item) => (
+              <Select.Option key={item.value} value={item.value}>
+                {item.text}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <RangePicker
+            size="large"
+            style={{ width: "100%" }}
+            allowClear
+            onChange={(value, [startDate, endDate]) => {
+              console.log(startDate);
+              setquery((prev) => ({
+                ...prev,
+                startDate: startDate ? startDate : undefined,
+                endDate: endDate ? endDate : undefined,
+              }));
+            }}
+          />
         </Col>
       </Row>
       <Table

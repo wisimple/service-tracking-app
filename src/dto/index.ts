@@ -37,3 +37,10 @@ export interface UserSigninDto {
   email: string;
   password: string;
 }
+
+export interface QueryTechnicalServiceDto {
+  customerId?: string;
+  status?: number;
+  startDate?: string;
+  endDate?: string;
+}

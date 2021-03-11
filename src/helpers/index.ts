@@ -20,3 +20,14 @@ export const getTechnicalServiceStatusType = (
     }
   );
 };
+
+export const isPatternLockString = (input: string) => {
+  const splitted = input.split(",");
+
+  for (let i = 0; i < splitted.length; i++) {
+    const parsed = parseInt(splitted[i]);
+    if (isNaN(parsed) || parsed > 9) return false;
+  }
+
+  return true;
+};

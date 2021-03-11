@@ -48,7 +48,7 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
       setshowGender(data.type === "person");
     } else {
     }
-  }, []);
+  }, [data]);
 
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit} scrollToFirstError>
