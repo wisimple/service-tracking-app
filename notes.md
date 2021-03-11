@@ -5,8 +5,8 @@
 +yeni musteri ekleme butonu inpun sagina gelicek, musteri
 +fault type should be multiple
 +teknik servis uniuq no
++manuel cihaz ekleme
 -teknik servise pin deseni girisi
--manuel cihaz ekleme
 -teknik servis teslim eden ve alan kisi
 -cihaz resimi uploadi
 

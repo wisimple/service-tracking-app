@@ -111,7 +111,7 @@ export default function TechnicalService() {
             return (
               <div>
                 <Tag color={color}>{text}</Tag>
-                {service?.deliveredAt && <small>{new Date(service.deliveredAt).toLocaleDateString()}</small>}
+                {service?.statusUAt && <small>{new Date(service.statusUAt).toLocaleDateString()}</small>}
               </div>
             );
           }}
