@@ -6,6 +6,7 @@ import {
   FETCH_TECHNICAL_SERVICES,
   GET_TECHNICAL_LAST_TRACKING_ID,
   GET_TECHNICAL_SERVICE,
+  GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY,
   GET_TECHNICAL_SERVICE_SUMMARY,
   SET_TECHNICAL_SERVICE_LOADING,
   TechnicalServiceActionTypes,
@@ -88,11 +89,24 @@ export const getTechnicalServicesLastTrackingId = (): TechnicalServiceThunkActio
   } catch (error) {}
 };
 
+export const getTechnicalServiceAccountSummary = (
+  queryParams?: QueryTechnicalServiceDto
+): TechnicalServiceThunkActionTypes => async (dispatch) => {
+  try {
+    dispatch(setLoading({ aSloading: true }));
+
+    const { data } = await api.get("technical-services/account-summary", { params: { ...queryParams } });
+    dispatch({ type: GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY, payload: { accountSummary: data } });
+    dispatch(setLoading({ aSloading: false }));
+  } catch (error) {}
+};
+
 const setLoading = (data: {
   loading?: boolean;
   cloading?: boolean;
   dloading?: boolean;
   uloading?: boolean;
+  aSloading?: boolean;
 }): TechnicalServiceActionTypes => ({
   type: SET_TECHNICAL_SERVICE_LOADING,
   payload: data,

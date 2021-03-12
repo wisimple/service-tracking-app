@@ -15,12 +15,17 @@ import {
   Radio,
   InputNumber,
   Form,
+  Input,
 } from "antd";
 import { LoadingOutlined, PlusOutlined, PrinterOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTechnicalServices, updateTechnicalService } from "store/technicalService/actions";
+import {
+  fetchTechnicalServices,
+  getTechnicalServiceAccountSummary,
+  updateTechnicalService,
+} from "store/technicalService/actions";
 
 import { ITechicalService } from "interfaces";
 import { getCustomerAvatarSrc, getDeviceImageUrl, getTechnicalServiceStatusType } from "helpers";
@@ -36,25 +41,32 @@ const { Column } = Table;
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
-const AmountUpdateForm = ({ service: { totalCost, paidAmount, _id } }: { service: ITechicalService }) => {
+const AmountUpdateForm = ({
+  service: { totalCost, paidAmount, _id },
+  onSuccess = () => {},
+}: {
+  service: ITechicalService;
+  onSuccess?: () => void;
+}) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const uloading = useSelector((state: RootState) => state.servicesState.uloading);
 
-  form.setFieldsValue({ totalCost, paidAmount });
+  useEffect(() => {
+    form.setFieldsValue({ totalCost, paidAmount });
+  }, [totalCost, paidAmount]);
+
+  const handleSubmit = async (values: TechnicalServiceDto) => {
+    await dispatch(updateTechnicalService(_id, values));
+    onSuccess();
+  };
 
   return (
-    <Form
-      form={form}
-      onFinish={(values: TechnicalServiceDto) => dispatch(updateTechnicalService(_id, values))}
-      wrapperCol={{ span: 12 }}
-      labelCol={{ span: 12 }}
-      size="small"
-    >
+    <Form form={form} onFinish={handleSubmit} wrapperCol={{ span: 12 }} labelCol={{ span: 12 }} size="small">
       <Form.Item label="Toplam Tutar" name="totalCost">
         <InputNumber />
       </Form.Item>
-      <Form.Item label="Odenen Tutar" name="paidAmount">
+      <Form.Item label="Ödenen Tutar" name="paidAmount">
         <InputNumber />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 12 }}>
@@ -67,7 +79,7 @@ const AmountUpdateForm = ({ service: { totalCost, paidAmount, _id } }: { service
 };
 
 const TechnicalService = () => {
-  const { services, accountSummary, loading, uloading } = useSelector(
+  const { services, accountSummary, loading, uloading, aSloading } = useSelector(
     (state: RootState) => state.servicesState
   );
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
@@ -102,6 +114,16 @@ const TechnicalService = () => {
       </Row>
 
       <Row style={{ marginBottom: 10 }} gutter={[8, 8]}>
+        <Col xs={24} md={3}>
+          <Input
+            size="large"
+            placeholder="Takip No"
+            value={query.trackingId}
+            onChange={({ target }) =>
+              setquery((prev) => ({ ...prev, trackingId: target.value || undefined }))
+            }
+          />
+        </Col>
         <Col xs={12} md={6}>
           <Select
             style={{ width: "100%" }}
@@ -126,7 +148,7 @@ const TechnicalService = () => {
             ))}
           </Select>
         </Col>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={4}>
           <Select
             style={{ width: "100%" }}
             placeholder="Servis Durumu"
@@ -142,7 +164,7 @@ const TechnicalService = () => {
             ))}
           </Select>
         </Col>
-        <Col xs={16} md={8} lg={8}>
+        <Col xs={16} md={8}>
           <RangePicker
             size="large"
             style={{ width: "100%" }}
@@ -157,7 +179,7 @@ const TechnicalService = () => {
             }}
           />
         </Col>
-        <Col xs={8} md={4} lg={4}>
+        <Col xs={8} md={3}>
           <Button block size="large" icon={<PrinterOutlined />} onClick={() => window.print()}>
             Yazdır
           </Button>
@@ -166,13 +188,20 @@ const TechnicalService = () => {
       {accountSummary && (
         <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
           <Descriptions.Item label="Toplam Tutar">
-            <Money amount={accountSummary?.totalCost} />
+            {aSloading ? "Yükleniyor" : <Money amount={accountSummary?.totalCost || 0} />}
           </Descriptions.Item>
           <Descriptions.Item label="Alınan Tutar">
-            <Money amount={accountSummary?.paidAmount} color="green" />
+            {aSloading ? "Yükleniyor" : <Money amount={accountSummary?.paidAmount} color="green" />}
           </Descriptions.Item>
           <Descriptions.Item label="Kalan Tutar">
-            <Money amount={accountSummary?.totalCost - accountSummary?.paidAmount} color="red" />
+            {aSloading ? (
+              "Yükleniyor"
+            ) : (
+              <Money
+                amount={(accountSummary?.totalCost || 0) - (accountSummary?.paidAmount || 0)}
+                color="red"
+              />
+            )}
           </Descriptions.Item>
         </Descriptions>
       )}
@@ -300,7 +329,15 @@ const TechnicalService = () => {
             const debt = (totalCost || 0) - (paidAmount || 0);
 
             return (
-              <Popover title="Ücreti Düzenle" content={<AmountUpdateForm service={service} />}>
+              <Popover
+                title="Ücreti Düzenle"
+                content={
+                  <AmountUpdateForm
+                    onSuccess={() => dispatch(getTechnicalServiceAccountSummary(query))}
+                    service={service}
+                  />
+                }
+              >
                 <div>
                   <Money amount={totalCost} color={debt === 0 ? "green" : ""} />
                 </div>

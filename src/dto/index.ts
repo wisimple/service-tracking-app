@@ -39,6 +39,7 @@ export interface UserSigninDto {
 }
 
 export interface QueryTechnicalServiceDto {
+  trackingId?: string;
   customerId?: string;
   status?: number;
   startDate?: string;

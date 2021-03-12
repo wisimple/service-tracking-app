@@ -23,15 +23,12 @@ interface Props {
 }
 
 const Money = ({ amount, color, size }: Props) => {
-  if (amount)
-    return (
-      <Wrapper color={color} size={size}>
-        {amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}
-        <StyledCurrency>₺</StyledCurrency>
-      </Wrapper>
-    );
-
-  return null;
+  return (
+    <Wrapper color={color} size={size}>
+      {amount ? amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,") : "0.00"}
+      <StyledCurrency>₺</StyledCurrency>
+    </Wrapper>
+  );
 };
 
 export default Money;

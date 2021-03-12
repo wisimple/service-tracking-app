@@ -2,6 +2,11 @@ import { ITechicalService, ITechnicalServiceSummary } from "interfaces";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "store";
 
+export interface AccountSummaryType {
+  totalCost?: number;
+  paidAmount?: number;
+}
+
 export interface TechnicalServiceState {
   services: ITechicalService[];
   service?: ITechicalService;
@@ -10,8 +15,9 @@ export interface TechnicalServiceState {
   cloading?: boolean;
   uloading?: boolean;
   dloading?: boolean;
+  aSloading?: boolean; //account summary loading
   lastTrackingId: number;
-  accountSummary?: { totalCost: number; paidAmount: number };
+  accountSummary?: AccountSummaryType;
 }
 
 export const FETCH_TECHNICAL_SERVICES = "FETCH_TECHNICAL_SERVICES";
@@ -24,6 +30,7 @@ export const SET_TECHNICAL_SERVICE_LOADING = "SET_TECHNICAL_SERVICE_LOADING";
 
 export const GET_TECHNICAL_SERVICE_SUMMARY = "GET_TECHNICAL_SERVICE_SUMMARY";
 export const GET_TECHNICAL_LAST_TRACKING_ID = "GET_TECHNICAL_LAST_TRACKING_ID";
+export const GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY = "GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY";
 
 interface FetchTechnicalServicesAction {
   type: typeof FETCH_TECHNICAL_SERVICES;
@@ -85,6 +92,13 @@ interface GetTechnicalServiceLastTrackingIdAction {
   };
 }
 
+interface GetTechnicalServiceAccountSummaryAction {
+  type: typeof GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY;
+  payload: {
+    accountSummary?: AccountSummaryType;
+  };
+}
+
 export type TechnicalServiceActionTypes =
   | FetchTechnicalServicesAction
   | CreateTechnicalServiceAction
@@ -93,7 +107,8 @@ export type TechnicalServiceActionTypes =
   | DeleteTechnicalServiceAction
   | SetLoadingAction
   | GetTechnicalServiceSummary
-  | GetTechnicalServiceLastTrackingIdAction;
+  | GetTechnicalServiceLastTrackingIdAction
+  | GetTechnicalServiceAccountSummaryAction;
 
 export type TechnicalServiceThunkActionTypes = ThunkAction<
   void,
