@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
-import { Table, Button, Typography, Row, Col, Popover, Tag, Select, DatePicker, Descriptions } from "antd";
-import { PlusOutlined, PrinterOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Popover,
+  Tag,
+  Select,
+  DatePicker,
+  Descriptions,
+  Radio,
+  InputNumber,
+  Form,
+} from "antd";
+import { LoadingOutlined, PlusOutlined, PrinterOutlined } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTechnicalServices } from "store/technicalService/actions";
+import { fetchTechnicalServices, updateTechnicalService } from "store/technicalService/actions";
 
 import { ITechicalService } from "interfaces";
 import { getCustomerAvatarSrc, getDeviceImageUrl, getTechnicalServiceStatusType } from "helpers";
@@ -16,14 +30,46 @@ import Money from "components/Money";
 import { fetchCustomers } from "store/customer/actions";
 
 import { technicServiceStatusTypes } from "constants/index";
-import { QueryTechnicalServiceDto } from "dto";
+import { QueryTechnicalServiceDto, TechnicalServiceDto } from "dto";
 
 const { Column } = Table;
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
-export default function TechnicalService() {
-  const { services, accountSummary, loading } = useSelector((state: RootState) => state.servicesState);
+const AmountUpdateForm = ({ service: { totalCost, paidAmount, _id } }: { service: ITechicalService }) => {
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const uloading = useSelector((state: RootState) => state.servicesState.uloading);
+
+  form.setFieldsValue({ totalCost, paidAmount });
+
+  return (
+    <Form
+      form={form}
+      onFinish={(values: TechnicalServiceDto) => dispatch(updateTechnicalService(_id, values))}
+      wrapperCol={{ span: 12 }}
+      labelCol={{ span: 12 }}
+      size="small"
+    >
+      <Form.Item label="Toplam Tutar" name="totalCost">
+        <InputNumber />
+      </Form.Item>
+      <Form.Item label="Odenen Tutar" name="paidAmount">
+        <InputNumber />
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 12 }}>
+        <Button htmlType="submit" loading={uloading}>
+          KAYDET
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+const TechnicalService = () => {
+  const { services, accountSummary, loading, uloading } = useSelector(
+    (state: RootState) => state.servicesState
+  );
   const { customers, loading: customersLoading } = useSelector((state: RootState) => state.customerState);
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
@@ -204,7 +250,35 @@ export default function TechnicalService() {
             const { text, color } = getTechnicalServiceStatusType(status);
             return (
               <div>
-                <Tag color={color}>{text}</Tag>
+                <Popover
+                  title={
+                    <>
+                      <span>Durumu Güncelle</span>
+                      {uloading && <LoadingOutlined spin style={{ marginLeft: 10 }} />}
+                    </>
+                  }
+                  content={
+                    <>
+                      <Radio.Group
+                        buttonStyle="solid"
+                        size="small"
+                        value={status}
+                        disabled={uloading}
+                        onChange={({ target }) =>
+                          dispatch(updateTechnicalService(service._id, { status: target.value as number }))
+                        }
+                      >
+                        {technicServiceStatusTypes.map((item) => (
+                          <Radio.Button key={item.value} value={item.value} style={{ marginBottom: "6px" }}>
+                            {item.text}
+                          </Radio.Button>
+                        ))}
+                      </Radio.Group>
+                    </>
+                  }
+                >
+                  <Tag color={color}>{text}</Tag>
+                </Popover>
                 {service?.statusUAt && <small>{new Date(service.statusUAt).toLocaleDateString()}</small>}
               </div>
             );
@@ -222,10 +296,11 @@ export default function TechnicalService() {
         />
         <Column
           title="Ücret"
-          render={({ paidAmount, totalCost }: ITechicalService) => {
+          render={({ paidAmount, totalCost, _id }, service: ITechicalService) => {
             const debt = (totalCost || 0) - (paidAmount || 0);
+
             return (
-              <>
+              <Popover title="Ücreti Düzenle" content={<AmountUpdateForm service={service} />}>
                 <div>
                   <Money amount={totalCost} color={debt === 0 ? "green" : ""} />
                 </div>
@@ -234,7 +309,7 @@ export default function TechnicalService() {
                     <Money amount={debt} size="small" color="red" /> (Kalan)
                   </div>
                 )}
-              </>
+              </Popover>
             );
           }}
         />
@@ -258,4 +333,6 @@ export default function TechnicalService() {
       </Table>
     </div>
   );
-}
+};
+
+export default TechnicalService;

@@ -15,7 +15,7 @@ export interface FaultTypeDto {
 }
 
 export interface TechnicalServiceDto {
-  customerId: string;
+  customerId?: string;
   demand?: string;
   desc?: string;
   device?: {
@@ -27,10 +27,10 @@ export interface TechnicalServiceDto {
     customName?: string;
   };
   faultTypeId?: string;
-  status: number;
+  status?: number;
   totalCost?: number;
   paidAmount?: number;
-  trackingId: number;
+  trackingId?: number;
 }
 
 export interface UserSigninDto {

@@ -367,7 +367,7 @@ const ServiceForm = ({ data }: Props) => {
                               Tamam
                             </Button>
                           </Col>
-                        </Row>{" "}
+                        </Row>
                       </>
                     )}
                   </>

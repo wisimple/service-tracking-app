@@ -23,7 +23,7 @@ const Summary = () => {
           const status = getTechnicalServiceStatusType(i);
           return (
             <Col key={i} xs={24} md={12} lg={8}>
-              <Link to={`${url}/technical-services`}>
+              <Link to={`${url}/technical-services?status=${status.value}`}>
                 <Card
                   loading={loading}
                   hoverable
