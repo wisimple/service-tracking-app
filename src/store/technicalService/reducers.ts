@@ -1,6 +1,5 @@
 import {
   FETCH_TECHNICAL_SERVICES,
-  CREATE_TECHNICAL_SERVICE,
   TechnicalServiceActionTypes,
   TechnicalServiceState,
   UPDATE_TECHNICAL_SERVICE,
@@ -26,10 +25,6 @@ export default function technicalServiceReducer(
       const { services, accountSummary } = action.payload;
       return { ...state, services, accountSummary };
     }
-
-    // case CREATE_TECHNICAL_SERVICE:
-    //   return { ...state, services: [action.payload.service, ...state.services] };
-
     case GET_TECHNICAL_SERVICE: {
       const { service } = action.payload;
       return { ...state, service };

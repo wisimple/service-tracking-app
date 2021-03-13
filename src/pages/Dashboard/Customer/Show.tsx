@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
-import { Button, Card, Col, Row, Skeleton, Space, Spin, Typography } from "antd";
+import { useEffect } from "react";
+import { Button, Col, Row, Skeleton, Space, Typography } from "antd";
 import { useParams, useRouteMatch } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomer } from "store/customer/actions";
 import Avatar from "antd/lib/avatar/avatar";
 import { RootState } from "store";
 import { getCustomerAvatarSrc } from "helpers";
-import CustomerForm from "components/CustomerForm";
-import CustomerServiceList from "components/CustomerServiceList";
+import TechnicalServiceList from "components/TechnicalServiceList";
 import { Link } from "react-router-dom";
 
 const { Title } = Typography;
@@ -46,7 +45,8 @@ const CustomerShow = () => {
           </Link>
         </Col>
       </Row>
-      <CustomerServiceList />
+
+      <TechnicalServiceList query={{ customerId: params.id }} />
     </>
   );
 };

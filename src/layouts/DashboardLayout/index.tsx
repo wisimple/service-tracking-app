@@ -6,6 +6,7 @@ import {
   SettingOutlined,
   TeamOutlined,
   LogoutOutlined,
+  BarcodeOutlined,
 } from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
@@ -70,6 +71,10 @@ const DashboardLayout = ({ children }: Props) => {
           <Menu.Item key={`${url}/customers`} icon={<TeamOutlined />}>
             <Link to={`${url}/customers`}>Müşterilerim</Link>
           </Menu.Item>
+          <Menu.Item key={`${url}/inventory`} icon={<BarcodeOutlined />}>
+            <Link to={`${url}/inventory`}>Stok Yönetimi</Link>
+          </Menu.Item>
+
           <Menu.Item key={`${url}/settings`} icon={<SettingOutlined />}>
             <Link to={`${url}/settings`}>Ayarlar</Link>
           </Menu.Item>

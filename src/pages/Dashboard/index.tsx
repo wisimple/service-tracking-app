@@ -12,6 +12,8 @@ import CustomerCreate from "pages/Dashboard/Customer/Create";
 import CustomerShow from "pages/Dashboard/Customer/Show";
 import CustomerEdit from "pages/Dashboard/Customer/Edit";
 
+import InventoryList from "pages/Dashboard/Inventory/List";
+
 import Settings from "pages/Dashboard/Settings";
 
 const Dashboard = () => {
@@ -30,6 +32,8 @@ const Dashboard = () => {
           <Route exact path={`${url}/customers/create`} component={CustomerCreate} />
           <Route path={`${url}/customers/:id/edit`} component={CustomerEdit} />
           <Route path={`${url}/customers/:id`} component={CustomerShow} />
+
+          <Route path={`${url}/inventory`} component={InventoryList} />
 
           <Route path={`${url}/settings`} component={Settings} />
         </Switch>
