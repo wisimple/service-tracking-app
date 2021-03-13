@@ -29,7 +29,7 @@ const TechnicalService = () => {
 
   useEffect(() => {
     dispatch(fetchCustomers());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

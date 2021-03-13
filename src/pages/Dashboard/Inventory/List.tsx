@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import { Card, Row, Col, Typography } from "antd";
+import { Row, Col, Tabs, Input, Typography, Button } from "antd";
 import api from "utils/api";
 import { IProduct } from "interfaces";
 import { getDeviceImageUrl } from "helpers";
 
 import styled from "styled-components";
 import Money from "components/Money";
+
+import { PlusOutlined } from "@ant-design/icons";
+
+const { TabPane } = Tabs;
+const { Search } = Input;
+const { Title } = Typography;
 
 const StyledCard = styled.div`
   display: flex;
@@ -48,9 +54,31 @@ const StockList = () => {
 
   return (
     <div>
+      <Row justify="space-between" align="middle">
+        <Col>
+          <Title level={3}>Stoktaki Ürünlerim</Title>
+        </Col>
+        <Col>
+          <Button type="primary" icon={<PlusOutlined />}>
+            Ürün Girişi Yap
+          </Button>
+        </Col>
+      </Row>
+      <Row style={{ marginBottom: 20 }}>
+        <Col span={12}>
+          <Search
+            placeholder="Ürün Arayın..."
+            size="large"
+            onSearch={(value) => console.log(value)}
+            enterButton
+            allowClear
+          />
+        </Col>
+      </Row>
+
       <Row gutter={[12, 12]}>
         {products.map((_, i) => (
-          <Col xs={12} md={8} lg={6} xl={4}>
+          <Col key={i} xs={12} md={8} lg={6} xl={4}>
             <StyledCard key={i}>
               {_.imgFile && <StyledImage alt="example" src={getDeviceImageUrl(_.imgFile)} />}
               <StyledHeader>Sony {_.name}</StyledHeader>

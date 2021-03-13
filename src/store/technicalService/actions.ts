@@ -14,12 +14,14 @@ import {
   UPDATE_TECHNICAL_SERVICE,
 } from "./types";
 
+const resourceName = "technical-services";
+
 export const fetchTechnicalServices = (
   queryParams?: QueryTechnicalServiceDto
 ): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get("technical-services", {
+    const { data } = await api.get(resourceName, {
       params: { ...queryParams },
     });
     dispatch({
@@ -35,7 +37,7 @@ export const createTechnicalService = (
 ): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ cloading: true }));
-    const { data } = await api.post("technical-services", technicalServiceDto);
+    const { data } = await api.post(resourceName, technicalServiceDto);
     dispatch({ type: CREATE_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ cloading: false }));
   } catch (error) {}
@@ -47,7 +49,7 @@ export const updateTechnicalService = (
 ): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ uloading: true }));
-    const { data } = await api.put(`technical-services/${id}`, technicalServiceDto);
+    const { data } = await api.put(`${resourceName}/${id}`, technicalServiceDto);
     dispatch({ type: UPDATE_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ uloading: false }));
   } catch (error) {}
@@ -56,7 +58,7 @@ export const updateTechnicalService = (
 export const getTechnicalService = (id: string): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get(`technical-services/${id}`);
+    const { data } = await api.get(`${resourceName}/${id}`);
     dispatch({ type: GET_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ loading: false }));
   } catch (error) {}
@@ -65,7 +67,7 @@ export const getTechnicalService = (id: string): TechnicalServiceThunkActionType
 export const deleteTechnicalService = (id: string): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ dloading: true }));
-    const { data } = await api.delete(`technical-services/${id}`);
+    const { data } = await api.delete(`${resourceName}/${id}`);
     dispatch({ type: DELETE_TECHNICAL_SERVICE, payload: { service: data } });
     dispatch(setLoading({ dloading: false }));
   } catch (error) {}
@@ -74,7 +76,7 @@ export const deleteTechnicalService = (id: string): TechnicalServiceThunkActionT
 export const getTechnicalServicesSummary = (): TechnicalServiceThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get(`technical-services/summary`);
+    const { data } = await api.get(`${resourceName}/summary`);
     dispatch({ type: GET_TECHNICAL_SERVICE_SUMMARY, payload: { summary: data } });
     dispatch(setLoading({ loading: false }));
   } catch (error) {}
@@ -84,7 +86,7 @@ export const getTechnicalServicesLastTrackingId = (): TechnicalServiceThunkActio
   dispatch
 ) => {
   try {
-    const { data } = await api.get(`technical-services/last-tracking-id`);
+    const { data } = await api.get(`${resourceName}/last-tracking-id`);
     dispatch({ type: GET_TECHNICAL_LAST_TRACKING_ID, payload: { id: data } });
   } catch (error) {}
 };
@@ -95,7 +97,7 @@ export const getTechnicalServiceAccountSummary = (
   try {
     dispatch(setLoading({ aSloading: true }));
 
-    const { data } = await api.get("technical-services/account-summary", { params: { ...queryParams } });
+    const { data } = await api.get(`${resourceName}/account-summary`, { params: { ...queryParams } });
     dispatch({ type: GET_TECHNICAL_SERVICE_ACCOUNT_SUMMARY, payload: { accountSummary: data } });
     dispatch(setLoading({ aSloading: false }));
   } catch (error) {}

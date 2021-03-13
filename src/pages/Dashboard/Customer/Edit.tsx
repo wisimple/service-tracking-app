@@ -14,7 +14,7 @@ const CustomerEdit = () => {
 
   useEffect(() => {
     dispatch(getCustomer(params.id));
-  }, [params.id]);
+  }, [params.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card title="Müşteri Bilgilerini Güncelle" loading={loading}>

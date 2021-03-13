@@ -81,32 +81,35 @@ const ServiceForm = ({ data }: Props) => {
     dispatch(fetchFaultTypes());
     dispatch(fetchCustomers());
     dispatch(fetchProductCategories());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (data) {
-      console.log("data var");
-
       const { device, customerId, faultTypeId } = data;
+
+      const productId = device?.productId?._id;
+      const brandId = device?.productId?.brandId._id;
+      const categoryId = device?.productId?.brandId?.catId?._id;
+
       form.resetFields();
       form.setFieldsValue({
         ...data,
         customerId: customerId?._id,
         device: {
-          categoryId: device?.categoryId,
-          brandId: device?.brandId?._id,
-          productId: device?.productId?._id,
+          categoryId,
+          brandId,
+          productId,
           serialNumber: device?.serialNumber,
           passOrPattern: device?.passOrPattern,
           customName: device?.customName,
         },
         faultTypeId: faultTypeId?.map((fT) => fT._id),
       });
-      if (device?.categoryId) {
-        dispatch(fetchBrandsByCategory(device?.categoryId));
+      if (categoryId) {
+        dispatch(fetchBrandsByCategory(categoryId));
       }
-      if (device?.brandId) {
-        dispatch(fetchProductsByBrand(device?.brandId._id));
+      if (brandId) {
+        dispatch(fetchProductsByBrand(brandId));
       }
       if (device?.productId?.imgFile) {
         setproductImageFileName(device.productId.imgFile);
@@ -121,13 +124,13 @@ const ServiceForm = ({ data }: Props) => {
     } else {
       dispatch(getTechnicalServicesLastTrackingId());
     }
-  }, [data]);
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!data) {
       form.setFieldsValue({ trackingId: lastTrackingId + 1 });
     }
-  }, [lastTrackingId]);
+  }, [lastTrackingId, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOnSubmit = async (values: TechnicalServiceDto) => {
     if (data) {
@@ -240,7 +243,7 @@ const ServiceForm = ({ data }: Props) => {
         {productImageFileName && (
           <Row justify="center" style={{ marginBottom: "1.5rem" }}>
             <Col>
-              <img src={getDeviceImageUrl(productImageFileName)} height={150} width="auto" />
+              <img alt="Device" src={getDeviceImageUrl(productImageFileName)} height={150} width="auto" />
             </Col>
           </Row>
         )}

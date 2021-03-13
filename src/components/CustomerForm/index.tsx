@@ -43,7 +43,6 @@ const CustomerForm = ({ onSubmit, data }: Props) => {
   };
 
   useEffect(() => {
-    console.log("hello");
     if (data) {
       setshowGender(data.type === "person");
     } else {

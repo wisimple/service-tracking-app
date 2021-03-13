@@ -1,4 +1,5 @@
 import { Breadcrumb, Layout, Menu } from "antd";
+import { grey } from "@ant-design/colors";
 import React from "react";
 import {
   DesktopOutlined,
@@ -6,7 +7,7 @@ import {
   SettingOutlined,
   TeamOutlined,
   LogoutOutlined,
-  BarcodeOutlined,
+  DropboxOutlined,
 } from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
@@ -15,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { signoutUser } from "store/user/actions";
 
 const { Header, Footer, Sider, Content } = Layout;
+const { SubMenu } = Menu;
 
 const getPathName = (pathName: string) => {
   if (pathName.length === 24) {
@@ -27,6 +29,10 @@ const getPathName = (pathName: string) => {
       return "Teknik Servis";
     case "customers":
       return "Müşterilerim";
+    case "inventory":
+      return "Stoktaki Ürünler";
+    case "showcase":
+      return "Vitrindeki Ürünler";
     case "create":
       return "Yeni";
     default:
@@ -71,9 +77,23 @@ const DashboardLayout = ({ children }: Props) => {
           <Menu.Item key={`${url}/customers`} icon={<TeamOutlined />}>
             <Link to={`${url}/customers`}>Müşterilerim</Link>
           </Menu.Item>
-          <Menu.Item key={`${url}/inventory`} icon={<BarcodeOutlined />}>
-            <Link to={`${url}/inventory`}>Stok Yönetimi</Link>
-          </Menu.Item>
+
+          <SubMenu
+            key="1"
+            icon={<DropboxOutlined />}
+            title={
+              <Link to={`${url}/inventory`} style={{ color: grey[0] }}>
+                Stok Yönetimi
+              </Link>
+            }
+          >
+            <Menu.Item key={`${url}/inventory`}>
+              <Link to={`${url}/inventory`}>Stoktaki Ürünler</Link>
+            </Menu.Item>
+            <Menu.Item key={`${url}/showcase`}>
+              <Link to={`${url}/showcase`}>Vitrindeki Ürünler</Link>
+            </Menu.Item>
+          </SubMenu>
 
           <Menu.Item key={`${url}/settings`} icon={<SettingOutlined />}>
             <Link to={`${url}/settings`}>Ayarlar</Link>

@@ -5,6 +5,8 @@ import { signinUser } from "store/user/actions";
 import { UserSigninDto } from "dto";
 import { RootState } from "store";
 
+import { Link } from "react-router-dom";
+
 const SigninForm = () => {
   const dispatch = useDispatch();
   const { signinLoading, signinErrorMessage } = useSelector((state: RootState) => state.userState);
@@ -63,9 +65,7 @@ const SigninForm = () => {
           <Checkbox>Beni hatırla</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="">
-          Parolamı unuttum
-        </a>
+        <Link to="/signin">Parolamı unuttum</Link>
       </Form.Item>
 
       <Form.Item>

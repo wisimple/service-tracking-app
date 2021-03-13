@@ -52,7 +52,7 @@ const PatternWrapper = styled.div`
 
 const PasswordPattern = ({ size = 3, initialPattern, onChange }: PatternProps) => {
   const [isAnimating, setisAnimating] = useState(false);
-  const [animationIndex, setanimationIndex] = useState(0);
+  const [, setanimationIndex] = useState(0);
   const [pattern, setpattern] = useState<number[]>(() => {
     return initialPattern?.split(",").map((item) => parseInt(item)) || [];
   });
@@ -91,7 +91,7 @@ const PasswordPattern = ({ size = 3, initialPattern, onChange }: PatternProps) =
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [initialPattern]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isAnimating)
     return (

@@ -45,8 +45,6 @@ export interface ITechicalService extends IMongoDefaults {
   demand?: string;
   desc?: string;
   device?: {
-    categoryId?: string;
-    brandId?: IBrand;
     productId?: IProduct;
     serialNumber?: string;
     imageFileNames?: string[];

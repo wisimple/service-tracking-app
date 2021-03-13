@@ -36,7 +36,7 @@ const AmountUpdateForm = ({
 
   useEffect(() => {
     form.setFieldsValue({ totalCost, paidAmount });
-  }, [totalCost, paidAmount]);
+  }, [totalCost, paidAmount, form]);
 
   const handleSubmit = async (values: TechnicalServiceDto) => {
     await dispatch(updateTechnicalService(_id, values));
@@ -75,7 +75,7 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
 
   useEffect(() => {
     dispatch(fetchTechnicalServices(query));
-  }, [query]);
+  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -139,7 +139,11 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
                 }
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <Avatar src={getCustomerAvatarSrc(customerId)} style={{ marginRight: 8, flexShrink: 0 }} />
+                  <Avatar
+                    alt="Avatar"
+                    src={getCustomerAvatarSrc(customerId)}
+                    style={{ marginRight: 8, flexShrink: 0 }}
+                  />
                   {customerId.name}
                 </div>
               </Popover>
@@ -156,13 +160,14 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   {device?.productId?.imgFile && (
                     <img
+                      alt="Device"
                       src={getDeviceImageUrl(device.productId.imgFile)}
                       height={35}
                       width="auto"
                       style={{ marginRight: 8 }}
                     />
                   )}
-                  {device?.brandId?.name} {device?.productId?.name}
+                  {device?.productId?.brandId?.name} {device?.productId?.name}
                 </div>
               );
             }

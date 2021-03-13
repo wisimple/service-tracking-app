@@ -28,3 +28,9 @@ export const warrantyDurations = [
   { value: 365 * 4, text: "4 Yıl" },
   { value: 365 * 5, text: "5 Yıl" },
 ];
+
+export const productStatusTypes = [
+  { value: 1, text: "Sıfır" },
+  { value: 0, text: "2. El" },
+  { value: 2, text: "Sıfır (Ambalajı açılmış)" },
+];

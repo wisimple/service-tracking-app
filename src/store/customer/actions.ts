@@ -11,10 +11,12 @@ import {
   UPDATE_CUSTOMER,
 } from "./types";
 
+const resourceName = "customers";
+
 export const fetchCustomers = (): CustomerThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get("customers");
+    const { data } = await api.get(resourceName);
     dispatch(setLoading({ loading: false }));
     dispatch({ type: FETCH_CUSTOMERS, payload: { customers: data } });
   } catch (error) {}
@@ -23,7 +25,7 @@ export const fetchCustomers = (): CustomerThunkActionTypes => async (dispatch) =
 export const createCustomer = (customerDto: CustomerDto): CustomerThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ cLoading: true }));
-    const { data } = await api.post("customers", customerDto);
+    const { data } = await api.post(resourceName, customerDto);
 
     dispatch({
       type: CREATE_CUSTOMER,
@@ -37,7 +39,7 @@ export const createCustomer = (customerDto: CustomerDto): CustomerThunkActionTyp
 export const getCustomer = (id: string): CustomerThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get(`customers/${id}`);
+    const { data } = await api.get(`${resourceName}/${id}`);
 
     dispatch({
       type: GET_CUSTOMER,
@@ -52,7 +54,7 @@ export const updateCustomer = (id: string, customerDto: CustomerDto): CustomerTh
 ) => {
   try {
     dispatch(setLoading({ cLoading: true }));
-    const { data } = await api.put(`customers/${id}`, customerDto);
+    const { data } = await api.put(`${resourceName}/${id}`, customerDto);
     dispatch({
       type: UPDATE_CUSTOMER,
       payload: { customer: data },
@@ -64,7 +66,7 @@ export const updateCustomer = (id: string, customerDto: CustomerDto): CustomerTh
 export const deleteCustomer = (id: string): CustomerThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ dLoading: true }));
-    const { data } = await api.delete(`customers/${id}`);
+    const { data } = await api.delete(`${resourceName}/${id}`);
     dispatch({
       type: DELETE_CUSTOMER,
       payload: { customer: data },

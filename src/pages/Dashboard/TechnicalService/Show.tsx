@@ -13,7 +13,7 @@ const Show = () => {
 
   useEffect(() => {
     dispatch(getTechnicalService(params.id));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card title="Teknik Servis Detayı">

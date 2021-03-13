@@ -11,10 +11,12 @@ import {
   SELECT_FAULT_TYPE,
 } from "./types";
 
+const resourceName = "fault-types";
+
 export const fetchFaultTypes = (): FaultTypeThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ loading: true }));
-    const { data } = await api.get("fault-types");
+    const { data } = await api.get(resourceName);
     dispatch(setLoading({ loading: false }));
     dispatch({ type: FETCH_FAULTTYPES, payload: { faultTypes: data } });
   } catch (error) {}
@@ -25,7 +27,7 @@ export const createFaultType = (faultTypeDto: FaultTypeDto): FaultTypeThunkActio
 ) => {
   try {
     dispatch(setLoading({ cLoading: true }));
-    const { data } = await api.post("fault-types", faultTypeDto);
+    const { data } = await api.post(resourceName, faultTypeDto);
 
     dispatch({
       type: CREATE_FAULTTYPE,
@@ -41,7 +43,7 @@ export const updateFaultType = (id: string, faultTypeDto: FaultTypeDto): FaultTy
 ) => {
   try {
     dispatch(setLoading({ uLoading: true }));
-    const { data } = await api.put(`fault-types/${id}`, faultTypeDto);
+    const { data } = await api.put(`${resourceName}/${id}`, faultTypeDto);
     dispatch({
       type: UPDATE_FAULTTYPE,
       payload: { faultType: data },
@@ -53,7 +55,7 @@ export const updateFaultType = (id: string, faultTypeDto: FaultTypeDto): FaultTy
 export const deleteFaultType = (id: string): FaultTypeThunkActionTypes => async (dispatch) => {
   try {
     dispatch(setLoading({ dLoading: true }));
-    const { data } = await api.delete(`fault-types/${id}`);
+    const { data } = await api.delete(`${resourceName}/${id}`);
     dispatch({
       type: DELETE_FAULTTYPE,
       payload: { faultType: data },

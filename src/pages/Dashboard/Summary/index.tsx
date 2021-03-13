@@ -14,7 +14,7 @@ const Summary = () => {
 
   useEffect(() => {
     dispatch(getTechnicalServicesSummary());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div>
       <Title level={3}>Teknik Servis Durumu</Title>
