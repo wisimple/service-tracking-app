@@ -8,6 +8,7 @@ import { RootState } from "store";
 import { getCustomerAvatarSrc } from "helpers";
 import TechnicalServiceList from "components/TechnicalServiceList";
 import { Link } from "react-router-dom";
+import { ToolTwoTone } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -46,7 +47,17 @@ const CustomerShow = () => {
         </Col>
       </Row>
 
-      <TechnicalServiceList query={{ customerId: params.id }} />
+      <Row gutter={[12, 12]}>
+        <Col xs={24} xxl={12}>
+          <Title level={4}>
+            <ToolTwoTone /> Teknik Servis İşlemleri
+          </Title>
+          <TechnicalServiceList query={{ customerId: params.id }} />
+        </Col>
+        <Col xs={24} xxl={12}>
+          <Title level={4}>Alış ve Satış İşlemleri</Title>
+        </Col>
+      </Row>
     </>
   );
 };

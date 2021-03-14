@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Tabs, Input, Typography, Button } from "antd";
+import { Link, useRouteMatch } from "react-router-dom";
+import { Row, Col, Input, Typography, Select, Card } from "antd";
 import api from "utils/api";
 import { IProduct } from "interfaces";
 import { getDeviceImageUrl } from "helpers";
 
 import styled from "styled-components";
 import Money from "components/Money";
+import { DropboxOutlined, ShoppingCartOutlined, ShopTwoTone } from "@ant-design/icons";
 
-import { PlusOutlined } from "@ant-design/icons";
-
-const { TabPane } = Tabs;
 const { Search } = Input;
 const { Title } = Typography;
 
@@ -42,6 +41,7 @@ const StyledHeader = styled.h3`
 
 const StockList = () => {
   const [products, setproducts] = useState<IProduct[]>([]);
+  const { url } = useRouteMatch();
 
   useEffect(() => {
     async function init() {
@@ -54,21 +54,45 @@ const StockList = () => {
 
   return (
     <div>
-      <Row justify="space-between" align="middle">
-        <Col>
-          <Title level={3}>Stoktaki Ürünlerim</Title>
+      <Row style={{ height: 100, marginBottom: 20 }} gutter={[12, 12]}>
+        <Col span={12}>
+          <Link to={`${url}/create`}>
+            <Card hoverable>
+              <Title level={4}>
+                <ShoppingCartOutlined /> Stoktan Ürün Satışı Yap
+              </Title>
+            </Card>
+          </Link>
         </Col>
-        <Col>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Ürün Girişi Yap
-          </Button>
+        <Col span={12}>
+          <Link to={`${url}/create`}>
+            <Card hoverable>
+              <Title level={4}>
+                <DropboxOutlined /> Stoğa Ürün Girişi Yap
+              </Title>
+            </Card>
+          </Link>
         </Col>
       </Row>
-      <Row style={{ marginBottom: 20 }}>
-        <Col span={12}>
+      <Row justify="space-between" align="middle">
+        <Col>
+          <Title level={3}>
+            <ShopTwoTone /> Stoktaki Ürünlerim
+          </Title>
+        </Col>
+      </Row>
+      <Row style={{ marginBottom: 20 }} gutter={[6, 6]}>
+        <Col xs={24} md={10} lg={6} xl={4}>
+          <Select size="large" defaultValue="0" style={{ width: "100%" }}>
+            <Select.Option value="0">Tüm Kategoriler</Select.Option>
+            <Select.Option value="1">sdfsdf</Select.Option>
+            <Select.Option value="2">werwr</Select.Option>
+          </Select>
+        </Col>
+        <Col xs={24} md={14} lg={12} xl={8}>
           <Search
-            placeholder="Ürün Arayın..."
             size="large"
+            placeholder="Ürün Arayın..."
             onSearch={(value) => console.log(value)}
             enterButton
             allowClear
@@ -78,7 +102,7 @@ const StockList = () => {
 
       <Row gutter={[12, 12]}>
         {products.map((_, i) => (
-          <Col key={i} xs={12} md={8} lg={6} xl={4}>
+          <Col key={i} xs={24} sm={12} md={8} lg={6} xl={4}>
             <StyledCard key={i}>
               {_.imgFile && <StyledImage alt="example" src={getDeviceImageUrl(_.imgFile)} />}
               <StyledHeader>Sony {_.name}</StyledHeader>

@@ -263,14 +263,15 @@ const ServiceForm = ({ data }: Props) => {
                     allowClear
                     onSelect={(value: string) => {
                       setproductImageFileName(undefined);
+                      dispatch(resetProducts());
                       form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
                       dispatch(fetchBrandsByCategory(value));
                     }}
                     onClear={() => {
                       setproductImageFileName(undefined);
-                      form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
                       dispatch(resetBrands());
                       dispatch(resetProducts());
+                      form.setFieldsValue({ device: { brandId: undefined, productId: undefined } });
                     }}
                     loading={loading}
                   >
@@ -288,9 +289,10 @@ const ServiceForm = ({ data }: Props) => {
                     placeholder="Marka"
                     loading={brandLoading}
                     allowClear
-                    onSelect={(value: string) => {
-                      form.setFieldsValue({ device: { productId: undefined } });
+                    onSelect={(value: string, item) => {
+                      console.log(item);
                       setproductImageFileName(undefined);
+                      form.setFieldsValue({ device: { productId: undefined } });
                       dispatch(fetchProductsByBrand(value));
                     }}
                     onClear={() => {

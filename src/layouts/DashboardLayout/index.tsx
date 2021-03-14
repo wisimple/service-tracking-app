@@ -7,7 +7,7 @@ import {
   SettingOutlined,
   TeamOutlined,
   LogoutOutlined,
-  DropboxOutlined,
+  BarcodeOutlined,
 } from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
@@ -33,8 +33,10 @@ const getPathName = (pathName: string) => {
       return "Stoktaki Ürünler";
     case "showcase":
       return "Vitrindeki Ürünler";
+    case "settings":
+      return "Ayarlar";
     case "create":
-      return "Yeni";
+      return "Ekle";
     default:
       return "hello";
   }
@@ -67,7 +69,7 @@ const DashboardLayout = ({ children }: Props) => {
     <Layout>
       <Sider collapsedWidth="0" breakpoint="lg" className="hide-on-print">
         <div className={styles.logo}>Logo </div>
-        <Menu theme="dark" defaultSelectedKeys={["/"]} mode="inline" selectedKeys={[pathname]}>
+        <Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
           <Menu.Item key={`${url}`} icon={<DesktopOutlined />}>
             <Link to={`${url}`}>Ana Ekran</Link>
           </Menu.Item>
@@ -80,10 +82,10 @@ const DashboardLayout = ({ children }: Props) => {
 
           <SubMenu
             key="1"
-            icon={<DropboxOutlined />}
+            icon={<BarcodeOutlined />}
             title={
               <Link to={`${url}/inventory`} style={{ color: grey[0] }}>
-                Stok Yönetimi
+                Stok ve Vitrin
               </Link>
             }
           >
@@ -91,7 +93,7 @@ const DashboardLayout = ({ children }: Props) => {
               <Link to={`${url}/inventory`}>Stoktaki Ürünler</Link>
             </Menu.Item>
             <Menu.Item key={`${url}/showcase`}>
-              <Link to={`${url}/showcase`}>Vitrindeki Ürünler</Link>
+              <Link to={`${url}/showcase`}>Vitrinim</Link>
             </Menu.Item>
           </SubMenu>
 

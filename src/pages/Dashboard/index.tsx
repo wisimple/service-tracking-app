@@ -13,8 +13,9 @@ import CustomerShow from "pages/Dashboard/Customer/Show";
 import CustomerEdit from "pages/Dashboard/Customer/Edit";
 
 import InventoryList from "pages/Dashboard/Inventory/List";
+import InventoryCreate from "pages/Dashboard/Inventory/Create";
 
-import ShowcaseList from "pages/Dashboard/Showcase/List";
+import ShowcaseList from "pages/Dashboard/Inventory/ShowcaseList";
 
 import Settings from "pages/Dashboard/Settings";
 
@@ -35,7 +36,8 @@ const Dashboard = () => {
           <Route path={`${url}/customers/:id/edit`} component={CustomerEdit} />
           <Route path={`${url}/customers/:id`} component={CustomerShow} />
 
-          <Route path={`${url}/inventory`} component={InventoryList} />
+          <Route exact path={`${url}/inventory`} component={InventoryList} />
+          <Route path={`${url}/inventory/create`} component={InventoryCreate} />
           <Route path={`${url}/showcase`} component={ShowcaseList} />
 
           <Route path={`${url}/settings`} component={Settings} />

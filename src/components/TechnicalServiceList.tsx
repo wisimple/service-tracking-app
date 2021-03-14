@@ -82,16 +82,21 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
       {accountSummary && (
         <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
           <Descriptions.Item label="Toplam Tutar">
-            {aSloading ? "Yükleniyor" : <Money amount={accountSummary?.totalCost || 0} />}
+            {aSloading ? "Yükleniyor" : <Money size="large" amount={accountSummary?.totalCost || 0} />}
           </Descriptions.Item>
           <Descriptions.Item label="Alınan Tutar">
-            {aSloading ? "Yükleniyor" : <Money amount={accountSummary?.paidAmount} color="green" />}
+            {aSloading ? (
+              "Yükleniyor"
+            ) : (
+              <Money size="large" amount={accountSummary?.paidAmount} color="green" />
+            )}
           </Descriptions.Item>
           <Descriptions.Item label="Kalan Tutar">
             {aSloading ? (
               "Yükleniyor"
             ) : (
               <Money
+                size="large"
                 amount={(accountSummary?.totalCost || 0) - (accountSummary?.paidAmount || 0)}
                 color="red"
               />

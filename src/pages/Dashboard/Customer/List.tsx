@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Avatar, Button, Col, Row, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SmileTwoTone } from "@ant-design/icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -27,7 +27,7 @@ const CustomerIndex = () => {
       <Row justify="space-between" align="middle" style={{ paddingBottom: 16 }}>
         <Col>
           <Title level={3} style={{ margin: 0 }}>
-            Müşterilerim
+            <SmileTwoTone /> Müşterilerim
           </Title>
         </Col>
         <Col>
@@ -63,11 +63,9 @@ const CustomerIndex = () => {
         <Column title="Açıklama / Notlar" dataIndex="desc" />
 
         <Column
-          title="İşlem"
-          dataIndex="action"
           render={(a, customer: Customer) => (
             <Link to={`${url}/${customer._id}`}>
-              <Button>Detaylar</Button>
+              <Button>Tüm İşlemleri Görüntüle</Button>
             </Link>
           )}
         />

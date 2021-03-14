@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
 import { Button, Typography, Row, Col, Select, DatePicker, Input } from "antd";
-import { PlusOutlined, PrinterOutlined } from "@ant-design/icons";
+import { PlusOutlined, PrinterOutlined, ToolTwoTone } from "@ant-design/icons";
 
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +36,7 @@ const TechnicalService = () => {
       <Row justify="space-between" style={{ paddingBottom: 16 }}>
         <Col>
           <Title level={3} style={{ margin: 0 }}>
-            Teknik Servis İşlemleri
+            <ToolTwoTone /> Teknik Servis İşlemleri
           </Title>
         </Col>
         <Col>
