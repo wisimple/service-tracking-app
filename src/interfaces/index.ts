@@ -7,6 +7,7 @@ interface IMongoDefaults {
 export interface IProductCategory {
   _id: string;
   name: string;
+  showOnServices?: boolean;
 }
 
 export interface IBrand {
@@ -72,4 +73,32 @@ export interface IUser extends IMongoDefaults {
   phoneNumber?: string;
   city?: string;
   address?: string;
+}
+
+export interface IUserProduct {
+  _id: string;
+  brandId: string;
+  name: string;
+  sPrice?: number;
+  pPrice?: number;
+  status: number;
+  imgFile?: string;
+  imgFiles?: string[];
+  desc?: string;
+  stock: number;
+}
+
+export interface IBasket {
+  products: IBasketProduct[];
+  basketAmount: number;
+  paidAmount: number;
+}
+
+export interface IBasketProduct {
+  _id: string;
+  name: string;
+  productId: string;
+  count: number;
+  price: number;
+  totalPrice: number;
 }

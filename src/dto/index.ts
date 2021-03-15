@@ -45,3 +45,20 @@ export interface QueryTechnicalServiceDto {
   startDate?: string;
   endDate?: string;
 }
+
+export interface UserProductDto {
+  brandId: string;
+  name: string;
+  sPrice?: number;
+  pPrice?: number;
+  status: number;
+  imgFile?: string;
+  imgFiles?: [string];
+  desc?: string;
+  stock: number;
+}
+
+export interface CategoryDto {
+  name: string;
+  showOnServices?: boolean;
+}

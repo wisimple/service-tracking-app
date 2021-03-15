@@ -19,6 +19,10 @@ import ShowcaseList from "pages/Dashboard/Inventory/ShowcaseList";
 
 import Settings from "pages/Dashboard/Settings";
 
+import CategoriesList from "pages/Dashboard/Categories/List";
+import BrandsList from "pages/Dashboard/Brands/List";
+import ProductsList from "pages/Dashboard/Products/List";
+
 const Dashboard = () => {
   const { url } = useRouteMatch();
   return (
@@ -41,6 +45,10 @@ const Dashboard = () => {
           <Route path={`${url}/showcase`} component={ShowcaseList} />
 
           <Route path={`${url}/settings`} component={Settings} />
+
+          <Route path={`${url}/categories`} component={CategoriesList} />
+          <Route path={`${url}/brands`} component={BrandsList} />
+          <Route path={`${url}/products`} component={ProductsList} />
         </Switch>
       </Route>
     </DashboardLayout>

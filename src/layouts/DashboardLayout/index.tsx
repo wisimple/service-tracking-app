@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   LogoutOutlined,
   BarcodeOutlined,
+  ClusterOutlined,
 } from "@ant-design/icons";
 
 import styles from "./dashLayout.module.scss";
@@ -33,6 +34,12 @@ const getPathName = (pathName: string) => {
       return "Stoktaki Ürünler";
     case "showcase":
       return "Vitrindeki Ürünler";
+    case "categories":
+      return "Kategorilerim";
+    case "brands":
+      return "Markalarım";
+    case "products":
+      return "Ürünlerim";
     case "settings":
       return "Ayarlar";
     case "create":
@@ -94,6 +101,25 @@ const DashboardLayout = ({ children }: Props) => {
             </Menu.Item>
             <Menu.Item key={`${url}/showcase`}>
               <Link to={`${url}/showcase`}>Vitrinim</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key="2"
+            icon={<ClusterOutlined />}
+            title={
+              <Link to={`${url}/categories`} style={{ color: grey[0] }}>
+                Tanımlamalar
+              </Link>
+            }
+          >
+            <Menu.Item key={`${url}/categories`}>
+              <Link to={`${url}/categories`}>Kategorilerim</Link>
+            </Menu.Item>
+            <Menu.Item key={`${url}/brands`}>
+              <Link to={`${url}/brands`}>Markalarım</Link>
+            </Menu.Item>
+            <Menu.Item key={`${url}/products`}>
+              <Link to={`${url}/products`}>Ürünlerim</Link>
             </Menu.Item>
           </SubMenu>
 

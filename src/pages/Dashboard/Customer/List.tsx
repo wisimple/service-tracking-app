@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Avatar, Button, Col, Row, Table, Typography } from "antd";
-import { PlusOutlined, SmileTwoTone } from "@ant-design/icons";
+import { PlusOutlined, RightOutlined, SmileTwoTone } from "@ant-design/icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -65,7 +65,9 @@ const CustomerIndex = () => {
         <Column
           render={(a, customer: Customer) => (
             <Link to={`${url}/${customer._id}`}>
-              <Button>Tüm İşlemleri Görüntüle</Button>
+              <Button>
+                Detaylar <RightOutlined />
+              </Button>
             </Link>
           )}
         />

@@ -28,7 +28,7 @@ import { technicServiceStatusTypes, warrantyDurations } from "constants/index";
 
 import { RootState } from "store";
 import { fetchBrandsByCategory, resetBrands } from "store/brand/actions";
-import { fetchProductCategories } from "store/productCategory/actions";
+import { getCategories } from "store/productCategory/actions";
 import { fetchProductsByBrand, resetProducts } from "store/product/actions";
 import { fetchCustomers } from "store/customer/actions";
 import Modal from "antd/lib/modal/Modal";
@@ -80,7 +80,7 @@ const ServiceForm = ({ data }: Props) => {
   useEffect(() => {
     dispatch(fetchFaultTypes());
     dispatch(fetchCustomers());
-    dispatch(fetchProductCategories());
+    dispatch(getCategories());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

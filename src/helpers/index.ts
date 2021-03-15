@@ -31,3 +31,5 @@ export const isPatternLockString = (input: string) => {
 
   return true;
 };
+
+export const generateUId = () => "_" + Math.random().toString(36).substr(2, 9);

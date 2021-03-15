@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { Row, Col, Input, Typography, Select, Card } from "antd";
-import api from "utils/api";
-import { IProduct } from "interfaces";
+import { Row, Col, Input, Typography, Select, Card, Empty } from "antd";
+
 import { getDeviceImageUrl } from "helpers";
 
 import styled from "styled-components";
 import Money from "components/Money";
 import { DropboxOutlined, ShoppingCartOutlined, ShopTwoTone } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserProducts } from "store/userProducts/actions";
+import { RootState } from "store";
 
 const { Search } = Input;
 const { Title } = Typography;
@@ -40,17 +42,13 @@ const StyledHeader = styled.h3`
 `;
 
 const StockList = () => {
-  const [products, setproducts] = useState<IProduct[]>([]);
+  const { products, loading } = useSelector((state: RootState) => state.userProducts);
   const { url } = useRouteMatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    async function init() {
-      const { data } = await api.get("products?brandId=6042b9a12e47a5c95fa524c7");
-
-      setproducts(data);
-    }
-    init();
-  }, []);
+    dispatch(getUserProducts());
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -104,7 +102,11 @@ const StockList = () => {
         {products.map((_, i) => (
           <Col key={i} xs={24} sm={12} md={8} lg={6} xl={4}>
             <StyledCard key={i}>
-              {_.imgFile && <StyledImage alt="example" src={getDeviceImageUrl(_.imgFile)} />}
+              {_.imgFile ? (
+                <StyledImage alt="example" src={getDeviceImageUrl(_.imgFile)} />
+              ) : (
+                <Empty description={false} />
+              )}
               <StyledHeader>Sony {_.name}</StyledHeader>
               <Money amount={2299} />
               <span>Stokta son 5 adet</span>

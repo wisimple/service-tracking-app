@@ -104,7 +104,7 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
           </Descriptions.Item>
         </Descriptions>
       )}
-      <Table
+      <Table<ITechicalService>
         id="table"
         dataSource={services}
         loading={loading}
@@ -114,10 +114,10 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
       >
         <Column title="Takip No" dataIndex="trackingId" />
         {showCustomerName && (
-          <Column
+          <Column<ITechicalService>
             className="hide-on-print"
             title="Müşteri"
-            render={({ customerId }: ITechicalService) => (
+            render={(_, { customerId }) => (
               <Popover
                 title={customerId.name}
                 content={
@@ -155,9 +155,9 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
             )}
           />
         )}
-        <Column
+        <Column<ITechicalService>
           title="Cihaz"
-          render={({ device }: ITechicalService) => {
+          render={(_, { device }) => {
             if (device?.customName) {
               return device.customName;
             } else {
@@ -178,10 +178,10 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
             }
           }}
         />
-        <Column
+        <Column<ITechicalService>
           title="Durum"
           dataIndex="status"
-          render={(status: number, service: ITechicalService) => {
+          render={(status: number, service) => {
             const { text, color } = getTechnicalServiceStatusType(status);
             return (
               <div>
@@ -219,9 +219,9 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
             );
           }}
         />
-        <Column
+        <Column<ITechicalService>
           title="Arıza"
-          render={({ faultTypeId }: ITechicalService) => (
+          render={(_, { faultTypeId }) => (
             <div>
               {faultTypeId?.map((fT) => (
                 <Tag key={fT._id}>{fT.name}</Tag>
@@ -229,10 +229,10 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
             </div>
           )}
         />
-        <Column
+        <Column<ITechicalService>
           title="Ücret"
-          render={({ paidAmount, totalCost, _id }, service: ITechicalService) => {
-            const debt = (totalCost || 0) - (paidAmount || 0);
+          render={(_, s) => {
+            const debt = (s.totalCost || 0) - (s.paidAmount || 0);
 
             return (
               <Popover
@@ -240,12 +240,12 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
                 content={
                   <AmountUpdateForm
                     onSuccess={() => dispatch(getTechnicalServiceAccountSummary(query))}
-                    service={service}
+                    service={s}
                   />
                 }
               >
                 <div>
-                  <Money amount={totalCost} color={debt === 0 ? "green" : ""} />
+                  <Money amount={s.totalCost} color={debt === 0 && s.totalCost ? "green" : ""} />
                 </div>
                 {debt !== 0 && (
                   <div style={{ fontSize: "12px" }}>
@@ -256,16 +256,16 @@ const TechnicalService = ({ query = {}, showCustomerName }: Props) => {
             );
           }}
         />
-        <Column
+        <Column<ITechicalService>
           title="Giriş Tarihi"
           dataIndex="cAt"
           render={(date: string) => {
             return new Date(date).toLocaleDateString();
           }}
         />
-        <Column
+        <Column<ITechicalService>
           className="hide-on-print"
-          render={(item: ITechicalService) => {
+          render={(_, item) => {
             return (
               <Button type="dashed">
                 <Link to={`${url}/${item._id}`}>İşlem Yap</Link>
