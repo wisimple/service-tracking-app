@@ -1,23 +1,29 @@
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Switch, message, Spin, Row, Col, Popconfirm } from "antd";
+import { Form, Input, Button, message, Spin, Row, Col, Popconfirm, Checkbox } from "antd";
 import { CategoryDto } from "dto";
-import { IProductCategory } from "interfaces";
-import { useEffect } from "react";
+import { ICategory } from "interfaces";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import { createUserCategory, deleteUserCategory, updateUserCategory } from "store/productCategory/actions";
 
 interface Props {
   onSuccess?: () => void;
-  data?: IProductCategory;
+  data?: ICategory;
   loading?: boolean;
 }
 
 const CategoryForm = ({ onSuccess = () => {}, data, loading = false }: Props) => {
   const { cloading, uloading, dloading } = useSelector((state: RootState) => state.productCategoryState);
   const dispatch = useDispatch();
+  const [showChecked, setshowChecked] = useState(false);
 
   const [form] = Form.useForm();
+
+  const onCheckboxChange = (e: { target: { checked: boolean } }) => {
+    setshowChecked(e.target.checked);
+    form.setFieldsValue({ showOnServices: e.target.checked });
+  };
 
   const handleSubmit = async (values: CategoryDto) => {
     if (data) {
@@ -27,15 +33,17 @@ const CategoryForm = ({ onSuccess = () => {}, data, loading = false }: Props) =>
     }
 
     message.success(`${values.name} kategorisi başarıyla ${data ? "güncellendi" : "oluşturuldu"}.`);
-    form.resetFields();
+    // form.resetFields();
     onSuccess();
   };
 
   useEffect(() => {
     if (data) {
-      form.setFieldsValue({ ...data });
+      form.setFieldsValue(data);
+      setshowChecked(data.showOnServices ? true : false);
     }
-  }, [data]);
+  }, [data, form]);
+
   return (
     <Spin spinning={loading}>
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -45,10 +53,13 @@ const CategoryForm = ({ onSuccess = () => {}, data, loading = false }: Props) =>
           required
           rules={[{ required: true, message: "Lütfen kategori ismini giriniz!" }]}
         >
-          <Input />
+          <Input autoFocus />
         </Form.Item>
-        <Form.Item label="Bu kategori Teknik Servis İşlemlerinde Görünsün" name="showOnServices">
-          <Switch checked={data?.showOnServices} />
+
+        <Form.Item name="showOnServices">
+          <Checkbox checked={showChecked} onChange={onCheckboxChange}>
+            Bu kategori Teknik Servis İşlemlerinde Görünsün
+          </Checkbox>
         </Form.Item>
         <Form.Item>
           {data ? (

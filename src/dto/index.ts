@@ -62,3 +62,8 @@ export interface CategoryDto {
   name: string;
   showOnServices?: boolean;
 }
+
+export interface BrandDto {
+  name: string;
+  catId: string;
+}

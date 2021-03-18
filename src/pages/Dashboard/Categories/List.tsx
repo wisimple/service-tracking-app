@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ClusterOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { List, Button, Typography, Col, Row, Modal } from "antd";
 import CategoryForm from "components/CategoryForm";
-import { IProductCategory } from "interfaces";
+import { ICategory } from "interfaces";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
@@ -42,7 +42,7 @@ const CategoryList = () => {
         <CategoryForm data={userCategory} loading={gloading} onSuccess={() => setisEditModalVisible(false)} />
       </Modal>
 
-      <List<IProductCategory>
+      <List<ICategory>
         loading={loading}
         size="large"
         header={
